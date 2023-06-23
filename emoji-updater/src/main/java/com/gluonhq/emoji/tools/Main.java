@@ -24,14 +24,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * Run this class to get the latest emoji data from https://github.com/iamcal/emoji-data/
+ *
+ * It grabs the emoji.json and the related spritesheet images, and add them to the emoji module,
+ * converting the json format into a csv file that can be read without third party dependencies.
+ *
+ * Current version: Emoji version 15.0 (September 2022)
+ */
 public class Main {
 
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
     private static final String EMOJI_JSON_URL = "https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji.json";
-    private static final String EMOJI_20_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheet_apple_20.png?raw=true";
-    private static final String EMOJI_32_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheet_apple_32.png?raw=true";
-    private static final String EMOJI_64_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheet_apple_64.png?raw=true";
+    private static final String EMOJI_20_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheets-clean/sheet_apple_20_clean.png?raw=true";
+    private static final String EMOJI_32_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheets-clean/sheet_apple_32_clean.png?raw=true";
+    private static final String EMOJI_64_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheets-clean/sheet_apple_64_clean.png?raw=true";
 
     public Main() throws IOException {
         Path files = Path.of("files");

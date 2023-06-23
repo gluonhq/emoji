@@ -60,7 +60,7 @@ public class EmojiData {
     private static final String COMMA_DELIMITER = "#";
 
     static {
-        // https://github.com/iamcal/emoji-data/blob/master/emoji.json
+        // See emoji-updater module on how to get and update this csv file
         try (final InputStream emojiStream = EmojiData.class.getResourceAsStream("emoji.csv");
              Scanner scanner = new Scanner(Objects.requireNonNull(emojiStream))) {
             while (scanner.hasNextLine()) {
