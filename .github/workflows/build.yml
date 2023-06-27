@@ -46,5 +46,5 @@ jobs:
           fi
         shell: bash
         env:
-          MAVEN_USERNAME: ${{ secrets.GLUON_NEXUS_USERNAME }}
-          MAVEN_CENTRAL_TOKEN: ${{ secrets.GLUON_NEXUS_PASSWORD }}
+          MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
