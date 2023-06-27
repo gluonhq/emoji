@@ -21,7 +21,7 @@ jobs:
           server-password: MAVEN_CENTRAL_TOKEN
 
       - name: Publish Release
-        run: mvn -B -ntp clean deploy
+        run: mvn -B -ntp clean deploy -f emoji
         env:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
