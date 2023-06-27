@@ -1,0 +1,51 @@
+name: Release
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Java
+        id: download
+        uses: oracle-actions/setup-java@v1
+        with:
+          website: jdk.java.net
+          release: 19
+          install: false
+
+      - name: Setup Java and Apache Maven
+        uses: actions/setup-java@v3
+        with:
+          distribution: jdkfile
+          jdkFile: ${{ steps.download.outputs.archive }}
+          java-version: ${{ steps.download.outputs.version }}
+          server-id: gluon-nexus
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_CENTRAL_TOKEN
+
+      - name: Publish Release
+        run: mvn -B -ntp clean deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.GLUON_NEXUS_USERNAME }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.GLUON_NEXUS_PASSWORD }}
+
+      - name: Commit next development version
+        if: steps.deploy.outputs.exit_code == 0
+        run: |
+          TAG=${GITHUB_REF/refs\/tags\//}
+          NEW_PROJECT_VERSION=${TAG%.*}.$((${TAG##*.} + 1))
+          echo "Update development version to $NEW_PROJECT_VERSION"
+          mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false
+          git config --global user.name 'Gluon Bot'
+          git config --global user.email 'gluon-bot@users.noreply.github.com'
+          git commit pom.xml -m "Prepare development of $NEW_PROJECT_VERSION"
+          git push https://gluon-bot:$PAT@github.com/$GITHUB_REPOSITORY HEAD:main
+        shell: bash
+        env:
+          PAT: ${{ secrets.GITHUB_TOKEN }}
