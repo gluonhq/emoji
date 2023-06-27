@@ -11,21 +11,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download Java
-        id: download
-        uses: oracle-actions/setup-java@v1
-        with:
-          website: jdk.java.net
-          release: 19
-          install: false
-
       - name: Setup Java and Apache Maven
         uses: actions/setup-java@v3
         with:
-          distribution: jdkfile
-          jdkFile: ${{ steps.download.outputs.archive }}
-          java-version: ${{ steps.download.outputs.version }}
-          server-id: gluon-nexus
+          distribution: 'temurin'
+          java-version: '11'
+          server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_CENTRAL_TOKEN
 

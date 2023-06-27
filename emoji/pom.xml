@@ -8,7 +8,7 @@
     <name>emoji-core</name>
     <description>Emoji support for JavaFX</description>
     <inceptionYear>2019</inceptionYear>
-    <url>https://github.com/gluonhq/Emoji</url>
+    <url>https://github.com/gluonhq/emoji</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -71,7 +71,7 @@
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/gluonhq/GluonFX/issues</url>
+        <url>https://github.com/gluonhq/emoji/issues</url>
     </issueManagement>
 
     <licenses>
@@ -98,19 +98,19 @@
     </developers>
 
     <scm>
-        <url>https://github.com/gluonhq/Emoji</url>
-        <connection>scm:git:git://github.com/gluonhq/Emoji.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:gluonhq/Emoji.git</developerConnection>
+        <url>https://github.com/gluonhq/emoji</url>
+        <connection>scm:git:git://github.com/gluonhq/emoji.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:gluonhq/emoji.git</developerConnection>
     </scm>
 
     <distributionManagement>
         <snapshotRepository>
-            <id>gluon-nexus</id>
-            <url>https://nexus.gluonhq.com/nexus/content/repositories/public-snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>gluon-nexus</id>
-            <url>https://nexus.gluonhq.com/nexus/content/repositories/releases/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
