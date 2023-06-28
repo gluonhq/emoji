@@ -1,0 +1,41 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Java and Apache Maven
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_CENTRAL_TOKEN
+
+      - name: Build Project
+        run: mvn -B -ntp clean verify -f emoji
+
+      - name: Publish Snapshots
+        if: github.ref == 'refs/heads/main'
+        run: |
+          # Find version
+          ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          if [[ $ver == *"SNAPSHOT"* ]]
+          then
+              mvn -B -ntp clean deploy -f emoji
+          fi
+        shell: bash
+        env:
+          MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
