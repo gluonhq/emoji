@@ -1,0 +1,7 @@
+# Maven
+target/
+
+# Intellij IDEA
+.idea/
+*.iml
+emoji-updater/files
