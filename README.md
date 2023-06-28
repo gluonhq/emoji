@@ -43,10 +43,14 @@ mvn javafx:run
 cd ..
 ```
 
+Contribution
+=====
 
+All contributions are welcome!
 
+There are two common ways to contribute:
 
+- Submit [GitHub issues](https://github.com/gluonhq/emoji/issues) for bug reports, questions, or requests for enhancements.
+- Open a [GitHub pull request](https://github.com/gluonhq/emoji/pulls).
 
-
-
-
+Follow [contributing rules](https://github.com/gluonhq/emoji/blob/master/CONTRIBUTING.md) for this repository.
