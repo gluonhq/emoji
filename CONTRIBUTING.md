@@ -11,11 +11,6 @@ Explore the existing documentation, including the README file.
 Check the issue tracker and pull requests to see if your desired contribution is already being discussed or worked on.
 Join our community discussion channels to engage with other contributors and seek guidance if needed.
 
-## Code of Conduct
-
-Please adhere to our project's Code of Conduct when participating in any project-related activities, both online and offline.
-Treat all community members with respect and create a welcoming and inclusive environment.
-
 ## Reporting Issues
 
 If you encounter a bug or have a suggestion, please submit an issue in the project's issue tracker.
@@ -35,7 +30,7 @@ Write clear and concise commit messages.
 Test your changes thoroughly.
 Update the documentation if necessary.
 Make sure your code passes all existing tests and linters.
-Submit your contribution as a pull request and link it to an issue with "Fixes #issue-number in the description of the PR.
+Submit your contribution as a pull request and link it to an issue with "Fixes #issue-number" in the description of the PR.
 
 ## Coding Standards
 
