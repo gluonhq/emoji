@@ -32,7 +32,7 @@ jobs:
           TAG=${GITHUB_REF/refs\/tags\//}
           NEW_PROJECT_VERSION=${TAG%.*}.$((${TAG##*.} + 1))
           echo "Update development version to $NEW_PROJECT_VERSION"
-          mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false
+          mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f emoji
           git config --global user.name 'Gluon Bot'
           git config --global user.email 'gluon-bot@users.noreply.github.com'
           git commit pom.xml -m "Prepare development of $NEW_PROJECT_VERSION"

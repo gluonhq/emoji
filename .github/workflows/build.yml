@@ -30,7 +30,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           # Find version
-          ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f emoji)
           if [[ $ver == *"SNAPSHOT"* ]]
           then
               mvn -B -ntp clean deploy -f emoji
