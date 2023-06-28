@@ -56,6 +56,7 @@ Make sure the documentation is clear, concise, and easy to understand.
 
 ## Submitting Pull Requests
 
+Sign the [Gluon Individual Contributor License Agreement (CLA)](https://cla.gluonhq.com) before opening a pull request.
 Include a descriptive title and summary of your changes.
 Reference related issues or feature requests, if applicable.
 Include step-by-step instructions on how to test your changes.
