@@ -35,388 +35,600 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The Emoji class holds all the parameters that define an emoji object,
+ * like its name, unified codepoints, x and y positions of the emoji image that
+ * can be located in a sprite sheet, or category and alternative emojis.
+ */
 public class Emoji {
 
     private static final String ITEMS_LIST_DELIMITER = "!";
     private static final String FIELDS_SKIN_DELIMITER = ",";
 
-    /**
-     * The official Unicode name, like "SMILING FACE WITH OPEN MOUTH AND SMILING EYES".
-     * Not null
-     */
     private String name;
 
-    /**
-     * The Unicode codepoint, like "1F604", without the 0x prefix.
-     * It can have one or more codepoints, separated by a dash character, and include
-     * a variant selector "FE0F", a zero width joiner "-200D",
-     * skin tone ("1F3FB" to "1F3FB") or hairstyle modifiers ("1F9B0" to "1F9B3").
-     * Not null
-     */
     private String unified;
 
-    /**
-     * The emojis that use a variation selector ("FE0F") can also be used without it, otherwise is null.
-     * For instance, for WORLD MAP ("1F5FA-FE0F") the non-qualified version is "1F5FA"
-     */
     private String non_qualified;
 
-    /**
-     * The legacy Unicode codepoints used by NTT Docomo (previously styled as DoCoMo), a Japanese phone carrier.
-     * For instance,for THUMBS UP SIGN ("1F44D"), the docomo version is "E727".
-     * It can be null
-     */
     private String docomo;
 
-    /**
-     * The legacy Unicode codepoints used by au by KDDI, a Japanese phone carrier.
-     * For instance,for THUMBS UP SIGN ("1F44D"), the au version is "E4F9".
-     * It can be null
-     */
     private String au;
 
-    /**
-     * The legacy Unicode codepoints used by SoftBank, a Japanese phone carrier.
-     * For instance,for THUMBS UP SIGN ("1F44D"), the softbank version is "E00E".
-     * It can be null
-     */
     private String softbank;
 
-    /**
-     * The legacy Unicode codepoints used by Google on Android devices.
-     * For instance,for THUMBS UP SIGN ("1F44D"), the google version is "FEB97".
-     * It can be null
-     */
     private String google;
 
-    /**
-     * The name of the image file, like "1f604.png".
-     * Not null
-     */
     private String image;
 
-    /**
-     * The x position of the image in the sprite sheets.
-     * For instance, for "1F604", the x position is 32
-     */
     private int sheet_x;
 
-    /**
-     * The y position of the image in the sprite sheets.
-     * For instance, for "1F604", the x position is 25
-     */
     private int sheet_y;
 
-    /**
-     * The common short name for the image.
-     * For instance, the short name for "1F604" is "smile".
-     * Not null
-     */
     private String short_name;
 
-    /**
-     * A list of common short names for the image.
-     * For instance, the short names for "1F92B" are "shushing_face"
-     * and "face_with_finger_covering_closed_lips".
-     * Not null
-     */
     private List<String> short_names;
 
-    /**
-     * An ASCII version of the emoji, like ":)" for "1F604", or null where none exists.
-     */
     private String text;
 
-    /**
-     * A list with the ASCII version of the emoji, like ";)" and ";-)" for "1F609",
-     * or null where none exists.
-     */
     private List<String> texts;
 
-    /**
-     * Category group name. For instance, "1F604" belongs to "Smileys & Emotion" category.
-     * It can't be null
-     */
     private String category;
 
-    /**
-     * Subcategory group name. For instance, "1F604" belongs to "face-smiling" subcategory.
-     * It can't be null
-     */
     private String subcategory;
 
-    /**
-     * Global sorting index for all emoji, based on Unicode CLDR ordering.
-     * For instance, the sorting index for "1F604" is 3
-     */
     private int sort_order;
 
-    /**
-     * Emoji or Unicode version in which this codepoint/sequence was added.
-     * For instance, "1FAE8" was added by the version 15.0.
-     * Not null
-     */
     private String added_in;
 
-    /**
-     * True if the given image set has an Apple image available. Note that
-     * the current sprite sheets are based on Apple images.
-     * For instance, "1F604" has it, but "2695-FE0F" doesn't, so it is represented with "?"
-     */
     private boolean has_img_apple;
 
-    /**
-     * True if the given image set has a Google image available. Note that
-     * the current project doesn't include the Google sprite sheets
-     */
     private boolean has_img_google;
 
-    /**
-     * True if the given image set has a Twitter image available. Note that
-     * the current project doesn't include the Twitter sprite sheets
-     */
     private boolean has_img_twitter;
 
-    /**
-     * True if the given image set has a Facebook image available. Note that
-     * the current project doesn't include the Facebook sprite sheets
-     */
     private boolean has_img_facebook;
 
-    /**
-     * For emojis that support multiple skin tone variations, a map of alternative emojis,
-     * keyed by the skin tone value.
-     * For instance, "1F3C3" has 5 skin variations: "1F3C3-1F3FB", ..., "1F3C3-1F3FF".
-     * For emojis that support multiple skin tones within a single emoji, each skin tone is
-     * separated by a dash character.
-     * For instance, "1F9D1-200D-1F91D-200D-1F9D1" has all 25 combinations.
-     * It can be null
-     */
     private Map<String, Emoji> skin_variations = new HashMap<>();
 
-    /**
-     * Emoji that are no longer used, in preference of gendered versions.
-     * It can be null
-     */
     private String obsoletes;
 
-    /**
-     * Emoji that are no longer used, in preference of gendered versions.
-     * It can be null
-     */
     private String obsoleted_by;
 
+    /**
+     * Gets an optional with the official Unicode name, like "SMILING FACE WITH OPEN MOUTH AND SMILING EYES".
+     *
+     * @return an optional with the name of the emoji or empty
+     */
     public Optional<String> getName() {
         return name == null ? Optional.empty() : Optional.of(name);
     }
 
+    /**
+     * Sets the official Unicode name, like "SMILING FACE WITH OPEN MOUTH AND SMILING EYES".
+     *
+     * @param name a string with the name of the emoji
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the Unicode codepoint, like "1F604", without the 0x prefix.
+     * It can have one or more codepoints, separated by a dash character, and include
+     * a variant selector "FE0F", a zero width joiner "-200D",
+     * skin tone ("1F3FB" to "1F3FB") or hairstyle modifiers ("1F9B0" to "1F9B3").
+     *
+     * @return a string with the unicode codepoint(s) of the emoji
+     */
     public String getUnified() {
         return unified;
     }
 
+    /**
+     * Sets the Unicode codepoint, like "1F604", without the 0x prefix.
+     * It can have one or more codepoints, separated by a dash character, and include
+     * a variant selector "FE0F", a zero width joiner "-200D",
+     * skin tone ("1F3FB" to "1F3FB") or hairstyle modifiers ("1F9B0" to "1F9B3").
+     *
+     * @param unified a string with the unicode codepoint(s) of the emoji
+     */
     public void setUnified(String unified) {
         this.unified = unified;
     }
 
+    /**
+     * Gets the non-qualified version of the emojis that use a variation selector ("FE0F").
+     * For instance, for WORLD MAP ("1F5FA-FE0F") the non-qualified version is "1F5FA"
+     *
+     * @return a string with the non-qualified version of the emoji, it can be null
+     */
     public String getNon_qualified() {
         return non_qualified;
     }
 
+    /**
+     * Sets the non-qualified version of the emojis that use a variation selector ("FE0F").
+     * For instance, for WORLD MAP ("1F5FA-FE0F") the non-qualified version is "1F5FA"
+     *
+     * @param non_qualified a string with the non-qualified version of the emoji, it can be null
+     */
     public void setNon_qualified(String non_qualified) {
         this.non_qualified = non_qualified;
     }
 
+    /**
+     * Gets an optional with the legacy Unicode codepoints used by NTT Docomo (previously styled as DoCoMo),
+     * a Japanese phone carrier, or empty.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the docomo version is "E727".
+     *
+     * @return an optional with the docomo codepoints of the emoji or empty
+     */
     public Optional<String> getDocomo() {
         return docomo == null ? Optional.empty() : Optional.of(docomo);
     }
 
+    /**
+     * Sets the legacy Unicode codepoints used by NTT Docomo (previously styled as DoCoMo), a Japanese phone carrier.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the docomo version is "E727".
+     *
+     * @param docomo a string with the docomo codepoints, or null
+     */
     public void setDocomo(String docomo) {
         this.docomo = docomo;
     }
 
+    /**
+     * Gets an optional with the legacy Unicode codepoints used by au by KDDI, a Japanese phone carrier.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the au version is "E4F9".
+     *
+     * @return an optional with the docomo codepoints of the emoji or empty
+     */
     public Optional<String> getAu() {
         return au == null ? Optional.empty() : Optional.of(au);
     }
 
+    /**
+     * Sets The legacy Unicode codepoints used by au by KDDI, a Japanese phone carrier.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the au version is "E4F9".
+     *
+     * @param au a string with the au codepoints, or null
+     */
     public void setAu(String au) {
         this.au = au;
     }
 
+    /**
+     * Gets an optional with the legacy Unicode codepoints used by SoftBank, a Japanese phone carrier.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the softbank version is "E00E".
+     *
+     * @return an optional with the docomo codepoints of the emoji or empty
+     */
     public Optional<String> getSoftbank() {
         return softbank == null ? Optional.empty() : Optional.of(softbank);
     }
 
+    /**
+     * Sets the legacy Unicode codepoints used by SoftBank, a Japanese phone carrier.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the softbank version is "E00E".
+     *
+     * @param softbank a string with the softbank codepoints, or null
+     */
     public void setSoftbank(String softbank) {
         this.softbank = softbank;
     }
 
+    /**
+     * Gets an optional with the legacy Unicode codepoints used by Google on Android devices.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the google version is "FEB97".
+     *
+     * @return an optional with the google codepoints of the emoji or empty
+     */
     public Optional<String> getGoogle() {
         return google == null ? Optional.empty() : Optional.of(google);
     }
 
+    /**
+     * Sets The legacy Unicode codepoints used by Google on Android devices.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the google version is "FEB97".
+     *
+     * @param google a string with the google codepoints, or null
+     */
     public void setGoogle(String google) {
         this.google = google;
     }
 
+    /**
+     * Gets an optional with the name of the image file, like "1f604.png".
+     *
+     * @return an optional with the name of the image file or empty
+     */
     public Optional<String> getImage() {
         return image == null ? Optional.empty() : Optional.of(image);
     }
 
+    /**
+     * Sets the name of the image file, like "1f604.png".
+     *
+     * @param image a string with the name of the image file of the emoji
+     */
     public void setImage(String image) {
         this.image = image;
     }
 
+    /**
+     * Gets the x position of the image in the sprite sheets.
+     * For instance, for "1F604", the x position is 32
+     *
+     * @return the x position of the emoji in the sprite sheets
+     */
     public int getSheet_x() {
         return sheet_x;
     }
 
+    /**
+     * Sets the x position of the image in the sprite sheets.
+     * For instance, for "1F604", the x position is 32
+     *
+     * @param sheet_x the x position of the emoji in the sprite sheets
+     */
     public void setSheet_x(int sheet_x) {
         this.sheet_x = sheet_x;
     }
 
+    /**
+     * Gets the y position of the image in the sprite sheets.
+     * For instance, for "1F604", the x position is 25
+     *
+     * @return the x position of the emoji in the sprite sheets
+     */
     public int getSheet_y() {
         return sheet_y;
     }
 
+    /**
+     * Sets the y position of the image in the sprite sheets.
+     * For instance, for "1F604", the x position is 25
+     *
+     * @param sheet_y the y position of the emoji in the sprite sheets
+     */
     public void setSheet_y(int sheet_y) {
         this.sheet_y = sheet_y;
     }
 
+    /**
+     * Gets an optional with the common short name of the emoji.
+     * For instance, the short name for "1F604" is "smile".
+     *
+     * @return an optional with the common short name of the emoji or empty
+     */
     public Optional<String> getShort_name() {
         return short_name == null? Optional.empty() : Optional.of(short_name);
     }
 
+    /**
+     * Sets the common short name for the emoji.
+     * For instance, the short name for "1F604" is "smile".
+     *
+     * @param short_name the short name of the emoji
+     */
     public void setShort_name(String short_name) {
         this.short_name = short_name;
     }
-    
+
+    /**
+     * Gets the common short name of the emoji wrapped with colons.
+     * For instance, the code name for "1F604" is ":smile:".
+     *
+     * @return the common short name of the emoji wrapped with colons or empty
+     */
     public String getCodeName() {
         return getShort_name().isPresent() ? ":" + getShort_name().get() + ":" : "";
     }
 
+    /**
+     * Gets a list of common short names for the emoji.
+     * For instance, the short names for "1F92B" are "shushing_face"
+     * and "face_with_finger_covering_closed_lips".
+     *
+     * @return a list of one or more common short names for the emoji
+     */
     public List<String> getShort_names() {
         return short_names;
     }
 
+    /**
+     * Sets the list of common short names for the emoji.
+     * For instance, the short names for "1F92B" are "shushing_face"
+     * and "face_with_finger_covering_closed_lips".
+     *
+     * @param short_names a list of common short names for the emoji
+     */
     public void setShort_names(List<String> short_names) {
         this.short_names = short_names;
     }
 
+    /**
+     * Gets an ASCII version of the emoji, like ":)" for "1F604", or null if none exists.
+     *
+     * @return a string with the ASCII version of the emoji, or null
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Sets an ASCII version of the emoji, like ":)" for "1F604", or null if none exists.
+     *
+     * @param text a string with the ASCII version of the emoji, can be null
+     */
     public void setText(String text) {
         this.text = text;
     }
 
+    /**
+     * Gets a list with the ASCII version of the emoji, like ";)" and ";-)" for "1F609",
+     * or empty if none exists.
+     *
+     * @return a list with the ASCII versions of the emoji
+     */
     public List<String> getTexts() {
         return texts;
     }
 
+    /**
+     * Sets a list with the ASCII version of the emoji, like ";)" and ";-)" for "1F609".
+     *
+     * @param texts a list with the ASCII versions of the emoji
+     */
     public void setTexts(List<String> texts) {
         this.texts = texts;
     }
 
+    /**
+     * Gets an optional with the category group name.
+     * For instance, "1F604" belongs to "Smileys & Emotion" category.
+     *
+     * @return an optional with the category group name of the emoji or empty
+     */
     public Optional<String> getCategory() {
         return category == null? Optional.empty() : Optional.of(category);
     }
 
+    /**
+     * Sets the category group name of the emoji.
+     * For instance, "1F604" belongs to "Smileys & Emotion" category.
+     *
+     * @param category a string with the category group name of the emoji.
+     */
     public void setCategory(String category) {
         this.category = category;
     }
 
+    /**
+     * Gets the subcategory group name of the emoji.
+     * For instance, "1F604" belongs to "face-smiling" subcategory.
+     *
+     * @return the subcategory group name of the emoji
+     */
     public String getSubcategory() {
         return subcategory;
     }
 
+    /**
+     * Sets the subcategory group name of the emoji.
+     * For instance, "1F604" belongs to "face-smiling" subcategory.
+     *
+     * @param subcategory a string with the subcategory group name of the emoji.
+     */
     public void setSubcategory(String subcategory) {
         this.subcategory = subcategory;
     }
 
+    /**
+     * Gets the global sorting index for the emoji, based on Unicode CLDR ordering.
+     * For instance, the sorting index for "1F604" is 3
+     *
+     * @return the global sorting index for the emoji
+     */
     public int getSort_order() {
         return sort_order;
     }
 
+    /**
+     * Sets the global sorting index for the emoji, based on Unicode CLDR ordering.
+     * For instance, the sorting index for "1F604" is 3
+     *
+     * @param sort_order the global sorting index for the emoji
+     */
     public void setSort_order(int sort_order) {
         this.sort_order = sort_order;
     }
 
+    /**
+     * Gets the Emoji or Unicode version in which this codepoint/sequence was added.
+     * For instance, "1FAE8" was added by the version 15.0.
+     *
+     * @return a string with the Emoji version of the emoji
+     */
     public String getAdded_in() {
         return added_in;
     }
 
+    /**
+     * Sets the Emoji or Unicode version in which this codepoint/sequence was added.
+     * For instance, "1FAE8" was added by the version 15.0.
+     *
+     * @param added_in a string with the Emoji version of the emoji
+     */
     public void setAdded_in(String added_in) {
         this.added_in = added_in;
     }
 
+    /**
+     * Gets if the emoji has an Apple image available or false otherwise.
+     * Note that the current sprite sheets are based on Apple images.
+     * For instance, "1F604" has it, but "2695-FE0F" doesn't, so it is represented with "?"
+     *
+     * @return true if the emoji has an Apple image, or false otherwise
+     */
     public boolean isHas_img_apple() {
         return has_img_apple;
     }
 
+    /**
+     * Sets if the emoji has an Apple image available.
+     * Note that the current sprite sheets are based on Apple images.
+     * For instance, "1F604" has it, but "2695-FE0F" doesn't, so it is represented with "?"
+     *
+     * @param has_img_apple true if the emoji has an Apple image available, false otherwise
+     */
     public void setHas_img_apple(boolean has_img_apple) {
         this.has_img_apple = has_img_apple;
     }
 
+
+    /**
+     * Gets if the emoji has a Google image available or false otherwise.
+     * Note that the current project doesn't include the Google sprite sheets
+     *
+     * @return true if the emoji has a Google image, or false otherwise
+     */
     public boolean isHas_img_google() {
         return has_img_google;
     }
 
+    /**
+     * Sets if the emoji has a Google image available.
+     * Note that the current project doesn't include the Google sprite sheets
+     *
+     * @param has_img_google true if the emoji has a Google image available, false otherwise
+     */
     public void setHas_img_google(boolean has_img_google) {
         this.has_img_google = has_img_google;
     }
 
+    /**
+     * Gets if the emoji has a Twitter image available or false otherwise.
+     * Note that the current project doesn't include the Twitter sprite sheets
+     *
+     * @return true if the emoji has a Twitter image, or false otherwise
+     */
     public boolean isHas_img_twitter() {
         return has_img_twitter;
     }
 
+    /**
+     * Sets if the emoji has a Twitter image available.
+     * Note that the current project doesn't include the Twitter sprite sheets
+     *
+     * @param has_img_twitter true if the emoji has a Twitter image available, false otherwise
+     */
     public void setHas_img_twitter(boolean has_img_twitter) {
         this.has_img_twitter = has_img_twitter;
     }
 
+    /**
+     * Gets if the emoji has a Facebook image available or false otherwise.
+     * Note that the current project doesn't include the Facebook sprite sheets
+     *
+     * @return true if the emoji has a Facebook image, or false otherwise
+     */
     public boolean isHas_img_facebook() {
         return has_img_facebook;
     }
 
+    /**
+     * Sets if the emoji has a Facebook image available.
+     * Note that the current project doesn't include the Facebook sprite sheets
+     *
+     * @param has_img_facebook true if the emoji has a Facebook image available, false otherwise
+     */
     public void setHas_img_facebook(boolean has_img_facebook) {
         this.has_img_facebook = has_img_facebook;
     }
 
+    /**
+     * For emojis that support multiple skin tone variations, gets a map of alternative emojis,
+     * with keys, the skin tone values, like "1F3FB", and values, the alternative emojis.
+     * For instance, "1F3C3" has 5 skin variations: "1F3C3-1F3FB", ..., "1F3C3-1F3FF".
+     * For emojis that support multiple skin tones within a single emoji, each skin tone is
+     * separated by a dash character.
+     * For instance, "1F9D1-200D-1F91D-200D-1F9D1" has all 25 combinations.
+     *
+     * @return a map with the skin variations of the emoji, or empty
+     */
     public Map<String, Emoji> getSkin_variations() {
         return skin_variations;
     }
 
+    /**
+     * For emojis that support multiple skin tone variations, sets a map of alternative emojis,
+     * with keys, the skin tone values, like "1F3FB", and values, the alternative emojis.
+     * For instance, "1F3C3" has 5 skin variations: "1F3C3-1F3FB", ..., "1F3C3-1F3FF".
+     * For emojis that support multiple skin tones within a single emoji, each skin tone is
+     * separated by a dash character.
+     * For instance, "1F9D1-200D-1F91D-200D-1F9D1" has all 25 combinations.
+     *
+     * @param skin_variations a map with the skin variations of the emoji, that can be empty
+     */
     public void setSkin_variations(Map<String, Emoji> skin_variations) {
         this.skin_variations = skin_variations;
     }
 
+    /**
+     * Gets the unicode codepoints of emojis that are no longer used, in preference of gendered versions.
+     * For instance, "1F468-200D-1F469-200D-1F466" obsoletes "1F46A".
+     *
+     * @return a string with the unicode codepoints of emojis that are no longer used, or null
+     */
     public String getObsoletes() {
         return obsoletes;
     }
 
+    /**
+     * Sets the unicode codepoints of emojis that are no longer used, in preference of gendered versions.
+     * For instance, "1F468-200D-1F469-200D-1F466" obsoletes "1F46A".
+     *
+     * @param obsoletes a string with the unicode codepoints of emojis that are no longer used, or null
+     */
     public void setObsoletes(String obsoletes) {
         this.obsoletes = obsoletes;
     }
 
+    /**
+     * Gets the unicode codepoints of emojis that are no longer used, in preference of gendered versions.
+     * For instance, "26F9-FE0F" is obsoleted by "26F9-FE0F-200D-2642-FE0F".
+     *
+     * @return a string with the unicode codepoints of emojis that are no longer used, or null
+     */
     public String getObsoleted_by() {
         return obsoleted_by;
     }
 
+    /**
+     * Gets the unicode codepoints of emojis that are no longer used, in preference of gendered versions.
+     * For instance, "26F9-FE0F" is obsoleted by "26F9-FE0F-200D-2642-FE0F".
+     *
+     * @param obsoleted_by a string with the unicode codepoints of emojis that are no longer used, or null
+     */
     public void setObsoleted_by(String obsoleted_by) {
         this.obsoleted_by = obsoleted_by;
     }
 
     /**
-     * `True` if emoji is coded on two or more bytes
+     * @return true if the emoji is coded on two or more bytes
      */
     public boolean isDoubleByte(Emoji emoji) {
         return getUnified().contains("-");
     }
 
+    /**
+     * Gets the unicode character of the emoji in UTF-16 representation.
+     * For instance, for an emoji with unified value "1F44B", returns "\uD83D\uDC4B"
+     *
+     * @return the unicode character of the emoji
+     */
     public String character() {
         return unicodeCharacter();
     }
