@@ -10,6 +10,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 5
+
 
       - name: Setup Java and Apache Maven
         uses: actions/setup-java@v3
@@ -19,12 +22,15 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_CENTRAL_TOKEN
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Publish Release
-        run: mvn -B -ntp clean deploy -f emoji
+        run: mvn -B -ntp clean deploy -f emoji -Prelease
         env:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Commit next development version
         if: steps.deploy.outputs.exit_code == 0
@@ -33,9 +39,11 @@ jobs:
           NEW_PROJECT_VERSION=${TAG%.*}.$((${TAG##*.} + 1))
           echo "Update development version to $NEW_PROJECT_VERSION"
           mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f emoji
+          mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f emoji-updater
+          mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f samples
           git config --global user.name 'Gluon Bot'
           git config --global user.email 'gluon-bot@users.noreply.github.com'
-          git commit pom.xml -m "Prepare development of $NEW_PROJECT_VERSION"
+          git commit emoji/pom.xml emoji-updater/pom.xml samples/pom.xml -m "Prepare development of $NEW_PROJECT_VERSION"
           git push https://gluon-bot:$PAT@github.com/$GITHUB_REPOSITORY HEAD:main
         shell: bash
         env:
