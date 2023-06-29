@@ -32,96 +32,178 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Represents the data for each emoji as parsed from emoji.json
- * {
- *     "name": "WHITE UP POINTING INDEX",
- *     "unified": "261D-FE0F",
- *     "non_qualified": "261D",
- *     "docomo": null,
- *     "au": "E4F6",
- *     "softbank": "E00F",
- *     "google": "FEB98",
- *     "image": "261d.png",
- *     "sheet_x": 1,
- *     "sheet_y": 2,
- *     "short_name": "point_up",
- *     "short_names": [
- *         "point_up"
- *     ],
- *     "text": null,
- *     "texts": null,
- *     "category": "People & Body",
- *     "subcategory": "hand-single-finger",
- *     "sort_order": 170,
- *     "added_in": "1.4",
- *     "has_img_apple": true,
- *     "has_img_google": true,
- *     "has_img_twitter": true,
- *     "has_img_facebook": false,
- *     "skin_variations": {
- *         "1F3FB": {
- *             "unified": "261D-1F3FB",
- *             "image": "261d-1f3fb.png",
- *             "sheet_x": 1,
- *             "sheet_y": 3,
- *             "added_in": "6.0",
- *             "has_img_apple": true,
- *             "has_img_google": false,
- *             "has_img_twitter": false,
- *             "has_img_facebook": false,
- *         }
- *         ...
- *         "1F3FB-1F3FC": {
- *             ...
- *         }
- *     },
- *     "obsoletes": "ABCD-1234",
- *     "obsoleted_by": "5678-90EF"
- * }
- */
 public class Emoji {
-
-    private static final Logger LOG = Logger.getLogger(Emoji.class.getName());
 
     private static final String ITEMS_LIST_DELIMITER = "!";
     private static final String FIELDS_SKIN_DELIMITER = ",";
 
+    /**
+     * The official Unicode name, like "SMILING FACE WITH OPEN MOUTH AND SMILING EYES".
+     * Not null
+     */
     private String name;
+
+    /**
+     * The Unicode codepoint, like "1F604", without the 0x prefix.
+     * It can have one or more codepoints, separated by a dash character, and include
+     * a variant selector "FE0F", a zero width joiner "-200D",
+     * skin tone ("1F3FB" to "1F3FB") or hairstyle modifiers ("1F9B0" to "1F9B3").
+     * Not null
+     */
     private String unified;
+
+    /**
+     * The emojis that use a variation selector ("FE0F") can also be used without it, otherwise is null.
+     * For instance, for WORLD MAP ("1F5FA-FE0F") the non-qualified version is "1F5FA"
+     */
     private String non_qualified;
 
+    /**
+     * The legacy Unicode codepoints used by NTT Docomo (previously styled as DoCoMo), a Japanese phone carrier.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the docomo version is "E727".
+     * It can be null
+     */
     private String docomo;
+
+    /**
+     * The legacy Unicode codepoints used by au by KDDI, a Japanese phone carrier.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the au version is "E4F9".
+     * It can be null
+     */
     private String au;
+
+    /**
+     * The legacy Unicode codepoints used by SoftBank, a Japanese phone carrier.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the softbank version is "E00E".
+     * It can be null
+     */
     private String softbank;
+
+    /**
+     * The legacy Unicode codepoints used by Google on Android devices.
+     * For instance,for THUMBS UP SIGN ("1F44D"), the google version is "FEB97".
+     * It can be null
+     */
     private String google;
+
+    /**
+     * The name of the image file, like "1f604.png".
+     * Not null
+     */
     private String image;
 
+    /**
+     * The x position of the image in the sprite sheets.
+     * For instance, for "1F604", the x position is 32
+     */
     private int sheet_x;
+
+    /**
+     * The y position of the image in the sprite sheets.
+     * For instance, for "1F604", the x position is 25
+     */
     private int sheet_y;
 
+    /**
+     * The common short name for the image.
+     * For instance, the short name for "1F604" is "smile".
+     * Not null
+     */
     private String short_name;
+
+    /**
+     * A list of common short names for the image.
+     * For instance, the short names for "1F92B" are "shushing_face"
+     * and "face_with_finger_covering_closed_lips".
+     * Not null
+     */
     private List<String> short_names;
 
+    /**
+     * An ASCII version of the emoji, like ":)" for "1F604", or null where none exists.
+     */
     private String text;
+
+    /**
+     * A list with the ASCII version of the emoji, like ";)" and ";-)" for "1F609",
+     * or null where none exists.
+     */
     private List<String> texts;
 
+    /**
+     * Category group name. For instance, "1F604" belongs to "Smileys & Emotion" category.
+     * It can't be null
+     */
     private String category;
+
+    /**
+     * Subcategory group name. For instance, "1F604" belongs to "face-smiling" subcategory.
+     * It can't be null
+     */
     private String subcategory;
+
+    /**
+     * Global sorting index for all emoji, based on Unicode CLDR ordering.
+     * For instance, the sorting index for "1F604" is 3
+     */
     private int sort_order;
+
+    /**
+     * Emoji or Unicode version in which this codepoint/sequence was added.
+     * For instance, "1FAE8" was added by the version 15.0.
+     * Not null
+     */
     private String added_in;
 
+    /**
+     * True if the given image set has an Apple image available. Note that
+     * the current sprite sheets are based on Apple images.
+     * For instance, "1F604" has it, but "2695-FE0F" doesn't, so it is represented with "?"
+     */
     private boolean has_img_apple;
+
+    /**
+     * True if the given image set has a Google image available. Note that
+     * the current project doesn't include the Google sprite sheets
+     */
     private boolean has_img_google;
+
+    /**
+     * True if the given image set has a Twitter image available. Note that
+     * the current project doesn't include the Twitter sprite sheets
+     */
     private boolean has_img_twitter;
+
+    /**
+     * True if the given image set has a Facebook image available. Note that
+     * the current project doesn't include the Facebook sprite sheets
+     */
     private boolean has_img_facebook;
 
+    /**
+     * For emojis that support multiple skin tone variations, a map of alternative emojis,
+     * keyed by the skin tone value.
+     * For instance, "1F3C3" has 5 skin variations: "1F3C3-1F3FB", ..., "1F3C3-1F3FF".
+     * For emojis that support multiple skin tones within a single emoji, each skin tone is
+     * separated by a dash character.
+     * For instance, "1F9D1-200D-1F91D-200D-1F9D1" has all 25 combinations.
+     * It can be null
+     */
     private Map<String, Emoji> skin_variations = new HashMap<>();
+
+    /**
+     * Emoji that are no longer used, in preference of gendered versions.
+     * It can be null
+     */
     private String obsoletes;
+
+    /**
+     * Emoji that are no longer used, in preference of gendered versions.
+     * It can be null
+     */
     private String obsoleted_by;
 
     public Optional<String> getName() {
