@@ -36,10 +36,11 @@ public class Main {
 
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
-    private static final String EMOJI_JSON_URL = "https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji.json";
-    private static final String EMOJI_20_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheets-clean/sheet_apple_20_clean.png?raw=true";
-    private static final String EMOJI_32_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheets-clean/sheet_apple_32_clean.png?raw=true";
-    private static final String EMOJI_64_PNG_URL = "https://github.com/iamcal/emoji-data/blob/master/sheets-clean/sheet_apple_64_clean.png?raw=true";
+    private static final String COMMIT_NUMBER = "063f328d7951cb2e2a6678b06dcbdf8dd599fad7"; // tag 15.0.1
+    private static final String EMOJI_JSON_URL = "https://raw.githubusercontent.com/iamcal/emoji-data/" + COMMIT_NUMBER + "/emoji.json";
+    private static final String EMOJI_20_PNG_URL = "https://github.com/iamcal/emoji-data/blob/" + COMMIT_NUMBER + "/sheets-clean/sheet_apple_20_clean.png?raw=true";
+    private static final String EMOJI_32_PNG_URL = "https://github.com/iamcal/emoji-data/blob/" + COMMIT_NUMBER + "/sheets-clean/sheet_apple_32_clean.png?raw=true";
+    private static final String EMOJI_64_PNG_URL = "https://github.com/iamcal/emoji-data/blob/" + COMMIT_NUMBER + "/sheets-clean/sheet_apple_64_clean.png?raw=true";
 
     public Main() throws IOException {
         Path files = Path.of("files");
