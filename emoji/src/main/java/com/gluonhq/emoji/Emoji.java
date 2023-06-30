@@ -49,7 +49,7 @@ public class Emoji {
 
     private String unified;
 
-    private String non_qualified;
+    private String nonQualified;
 
     private String docomo;
 
@@ -61,39 +61,39 @@ public class Emoji {
 
     private String image;
 
-    private int sheet_x;
+    private int sheetX;
 
-    private int sheet_y;
+    private int sheetY;
 
-    private String short_name;
+    private String shortName;
 
-    private List<String> short_names;
+    private List<String> shortNameList;
 
     private String text;
 
-    private List<String> texts;
+    private List<String> textList;
 
     private String category;
 
     private String subcategory;
 
-    private int sort_order;
+    private int sortOrder;
 
-    private String added_in;
+    private String addedIn;
 
-    private boolean has_img_apple;
+    private boolean hasImgApple;
 
-    private boolean has_img_google;
+    private boolean hasImgGoogle;
 
-    private boolean has_img_twitter;
+    private boolean hasImgTwitter;
 
-    private boolean has_img_facebook;
+    private boolean hasImgFacebook;
 
-    private Map<String, Emoji> skin_variations = new HashMap<>();
+    private Map<String, Emoji> skinVariationMap = new HashMap<>();
 
     private String obsoletes;
 
-    private String obsoleted_by;
+    private String obsoletedBy;
 
     /**
      * Gets an optional with the official Unicode name, like "SMILING FACE WITH OPEN MOUTH AND SMILING EYES".
@@ -143,18 +143,18 @@ public class Emoji {
      *
      * @return a string with the non-qualified version of the emoji, it can be null
      */
-    public String getNon_qualified() {
-        return non_qualified;
+    public String getNonQualified() {
+        return nonQualified;
     }
 
     /**
      * Sets the non-qualified version of the emojis that use a variation selector ("FE0F").
      * For instance, for WORLD MAP ("1F5FA-FE0F") the non-qualified version is "1F5FA"
      *
-     * @param non_qualified a string with the non-qualified version of the emoji, it can be null
+     * @param nonQualified a string with the non-qualified version of the emoji, it can be null
      */
-    public void setNon_qualified(String non_qualified) {
-        this.non_qualified = non_qualified;
+    public void setNonQualified(String nonQualified) {
+        this.nonQualified = nonQualified;
     }
 
     /**
@@ -262,18 +262,18 @@ public class Emoji {
      *
      * @return the x position of the emoji in the sprite sheets
      */
-    public int getSheet_x() {
-        return sheet_x;
+    public int getSheetX() {
+        return sheetX;
     }
 
     /**
      * Sets the x position of the image in the sprite sheets.
      * For instance, for "1F604", the x position is 32
      *
-     * @param sheet_x the x position of the emoji in the sprite sheets
+     * @param sheetX the x position of the emoji in the sprite sheets
      */
-    public void setSheet_x(int sheet_x) {
-        this.sheet_x = sheet_x;
+    public void setSheetX(int sheetX) {
+        this.sheetX = sheetX;
     }
 
     /**
@@ -282,18 +282,18 @@ public class Emoji {
      *
      * @return the x position of the emoji in the sprite sheets
      */
-    public int getSheet_y() {
-        return sheet_y;
+    public int getSheetY() {
+        return sheetY;
     }
 
     /**
      * Sets the y position of the image in the sprite sheets.
      * For instance, for "1F604", the x position is 25
      *
-     * @param sheet_y the y position of the emoji in the sprite sheets
+     * @param sheetY the y position of the emoji in the sprite sheets
      */
-    public void setSheet_y(int sheet_y) {
-        this.sheet_y = sheet_y;
+    public void setSheetY(int sheetY) {
+        this.sheetY = sheetY;
     }
 
     /**
@@ -302,18 +302,18 @@ public class Emoji {
      *
      * @return an optional with the common short name of the emoji or empty
      */
-    public Optional<String> getShort_name() {
-        return short_name == null? Optional.empty() : Optional.of(short_name);
+    public Optional<String> getShortName() {
+        return shortName == null? Optional.empty() : Optional.of(shortName);
     }
 
     /**
      * Sets the common short name for the emoji.
      * For instance, the short name for "1F604" is "smile".
      *
-     * @param short_name the short name of the emoji
+     * @param shortName the short name of the emoji
      */
-    public void setShort_name(String short_name) {
-        this.short_name = short_name;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     /**
@@ -323,7 +323,7 @@ public class Emoji {
      * @return the common short name of the emoji wrapped with colons or empty
      */
     public String getCodeName() {
-        return getShort_name().isPresent() ? ":" + getShort_name().get() + ":" : "";
+        return getShortName().isPresent() ? ":" + getShortName().get() + ":" : "";
     }
 
     /**
@@ -333,8 +333,8 @@ public class Emoji {
      *
      * @return a list of one or more common short names for the emoji
      */
-    public List<String> getShort_names() {
-        return short_names;
+    public List<String> getShortNameList() {
+        return shortNameList;
     }
 
     /**
@@ -342,10 +342,10 @@ public class Emoji {
      * For instance, the short names for "1F92B" are "shushing_face"
      * and "face_with_finger_covering_closed_lips".
      *
-     * @param short_names a list of common short names for the emoji
+     * @param shortNameList a list of common short names for the emoji
      */
-    public void setShort_names(List<String> short_names) {
-        this.short_names = short_names;
+    public void setShortNameList(List<String> shortNameList) {
+        this.shortNameList = shortNameList;
     }
 
     /**
@@ -372,17 +372,17 @@ public class Emoji {
      *
      * @return a list with the ASCII versions of the emoji
      */
-    public List<String> getTexts() {
-        return texts;
+    public List<String> getTextList() {
+        return textList;
     }
 
     /**
      * Sets a list with the ASCII version of the emoji, like ";)" and ";-)" for "1F609".
      *
-     * @param texts a list with the ASCII versions of the emoji
+     * @param textList a list with the ASCII versions of the emoji
      */
-    public void setTexts(List<String> texts) {
-        this.texts = texts;
+    public void setTextList(List<String> textList) {
+        this.textList = textList;
     }
 
     /**
@@ -431,18 +431,18 @@ public class Emoji {
      *
      * @return the global sorting index for the emoji
      */
-    public int getSort_order() {
-        return sort_order;
+    public int getSortOrder() {
+        return sortOrder;
     }
 
     /**
      * Sets the global sorting index for the emoji, based on Unicode CLDR ordering.
      * For instance, the sorting index for "1F604" is 3
      *
-     * @param sort_order the global sorting index for the emoji
+     * @param sortOrder the global sorting index for the emoji
      */
-    public void setSort_order(int sort_order) {
-        this.sort_order = sort_order;
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     /**
@@ -451,18 +451,18 @@ public class Emoji {
      *
      * @return a string with the Emoji version of the emoji
      */
-    public String getAdded_in() {
-        return added_in;
+    public String getAddedIn() {
+        return addedIn;
     }
 
     /**
      * Sets the Emoji or Unicode version in which this codepoint/sequence was added.
      * For instance, "1FAE8" was added by the version 15.0.
      *
-     * @param added_in a string with the Emoji version of the emoji
+     * @param addedIn a string with the Emoji version of the emoji
      */
-    public void setAdded_in(String added_in) {
-        this.added_in = added_in;
+    public void setAddedIn(String addedIn) {
+        this.addedIn = addedIn;
     }
 
     /**
@@ -472,8 +472,8 @@ public class Emoji {
      *
      * @return true if the emoji has an Apple image, or false otherwise
      */
-    public boolean isHas_img_apple() {
-        return has_img_apple;
+    public boolean hasImgApple() {
+        return hasImgApple;
     }
 
     /**
@@ -481,10 +481,10 @@ public class Emoji {
      * Note that the current sprite sheets are based on Apple images.
      * For instance, "1F604" has it, but "2695-FE0F" doesn't, so it is represented with "?"
      *
-     * @param has_img_apple true if the emoji has an Apple image available, false otherwise
+     * @param hasImgApple true if the emoji has an Apple image available, false otherwise
      */
-    public void setHas_img_apple(boolean has_img_apple) {
-        this.has_img_apple = has_img_apple;
+    public void setHasImgApple(boolean hasImgApple) {
+        this.hasImgApple = hasImgApple;
     }
 
 
@@ -494,18 +494,18 @@ public class Emoji {
      *
      * @return true if the emoji has a Google image, or false otherwise
      */
-    public boolean isHas_img_google() {
-        return has_img_google;
+    public boolean hasImgGoogle() {
+        return hasImgGoogle;
     }
 
     /**
      * Sets if the emoji has a Google image available.
      * Note that the current project doesn't include the Google sprite sheets
      *
-     * @param has_img_google true if the emoji has a Google image available, false otherwise
+     * @param hasImgGoogle true if the emoji has a Google image available, false otherwise
      */
-    public void setHas_img_google(boolean has_img_google) {
-        this.has_img_google = has_img_google;
+    public void setHasImgGoogle(boolean hasImgGoogle) {
+        this.hasImgGoogle = hasImgGoogle;
     }
 
     /**
@@ -514,18 +514,18 @@ public class Emoji {
      *
      * @return true if the emoji has a Twitter image, or false otherwise
      */
-    public boolean isHas_img_twitter() {
-        return has_img_twitter;
+    public boolean hasImgTwitter() {
+        return hasImgTwitter;
     }
 
     /**
      * Sets if the emoji has a Twitter image available.
      * Note that the current project doesn't include the Twitter sprite sheets
      *
-     * @param has_img_twitter true if the emoji has a Twitter image available, false otherwise
+     * @param hasImgTwitter true if the emoji has a Twitter image available, false otherwise
      */
-    public void setHas_img_twitter(boolean has_img_twitter) {
-        this.has_img_twitter = has_img_twitter;
+    public void setHasImgTwitter(boolean hasImgTwitter) {
+        this.hasImgTwitter = hasImgTwitter;
     }
 
     /**
@@ -534,18 +534,18 @@ public class Emoji {
      *
      * @return true if the emoji has a Facebook image, or false otherwise
      */
-    public boolean isHas_img_facebook() {
-        return has_img_facebook;
+    public boolean hasImgFacebook() {
+        return hasImgFacebook;
     }
 
     /**
      * Sets if the emoji has a Facebook image available.
      * Note that the current project doesn't include the Facebook sprite sheets
      *
-     * @param has_img_facebook true if the emoji has a Facebook image available, false otherwise
+     * @param hasImgFacebook true if the emoji has a Facebook image available, false otherwise
      */
-    public void setHas_img_facebook(boolean has_img_facebook) {
-        this.has_img_facebook = has_img_facebook;
+    public void setHasImgFacebook(boolean hasImgFacebook) {
+        this.hasImgFacebook = hasImgFacebook;
     }
 
     /**
@@ -558,8 +558,8 @@ public class Emoji {
      *
      * @return a map with the skin variations of the emoji, or empty
      */
-    public Map<String, Emoji> getSkin_variations() {
-        return skin_variations;
+    public Map<String, Emoji> getSkinVariationMap() {
+        return skinVariationMap;
     }
 
     /**
@@ -570,10 +570,10 @@ public class Emoji {
      * separated by a dash character.
      * For instance, "1F9D1-200D-1F91D-200D-1F9D1" has all 25 combinations.
      *
-     * @param skin_variations a map with the skin variations of the emoji, that can be empty
+     * @param skinVariationMap a map with the skin variations of the emoji, that can be empty
      */
-    public void setSkin_variations(Map<String, Emoji> skin_variations) {
-        this.skin_variations = skin_variations;
+    public void setSkinVariationMap(Map<String, Emoji> skinVariationMap) {
+        this.skinVariationMap = skinVariationMap;
     }
 
     /**
@@ -602,18 +602,18 @@ public class Emoji {
      *
      * @return a string with the unicode codepoints of emojis that are no longer used, or null
      */
-    public String getObsoleted_by() {
-        return obsoleted_by;
+    public String getObsoletedBy() {
+        return obsoletedBy;
     }
 
     /**
      * Gets the unicode codepoints of emojis that are no longer used, in preference of gendered versions.
      * For instance, "26F9-FE0F" is obsoleted by "26F9-FE0F-200D-2642-FE0F".
      *
-     * @param obsoleted_by a string with the unicode codepoints of emojis that are no longer used, or null
+     * @param obsoletedBy a string with the unicode codepoints of emojis that are no longer used, or null
      */
-    public void setObsoleted_by(String obsoleted_by) {
-        this.obsoleted_by = obsoleted_by;
+    public void setObsoletedBy(String obsoletedBy) {
+        this.obsoletedBy = obsoletedBy;
     }
 
     /**
@@ -647,20 +647,20 @@ public class Emoji {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Emoji emoji = (Emoji) o;
-        return sheet_x == emoji.sheet_x && sheet_y == emoji.sheet_y && sort_order == emoji.sort_order &&
-                has_img_apple == emoji.has_img_apple && has_img_google == emoji.has_img_google && has_img_twitter == emoji.has_img_twitter && has_img_facebook == emoji.has_img_facebook &&
-                Objects.equals(name, emoji.name) && Objects.equals(unified, emoji.unified) && Objects.equals(non_qualified, emoji.non_qualified) &&
+        return sheetX == emoji.sheetX && sheetY == emoji.sheetY && sortOrder == emoji.sortOrder &&
+                hasImgApple == emoji.hasImgApple && hasImgGoogle == emoji.hasImgGoogle && hasImgTwitter == emoji.hasImgTwitter && hasImgFacebook == emoji.hasImgFacebook &&
+                Objects.equals(name, emoji.name) && Objects.equals(unified, emoji.unified) && Objects.equals(nonQualified, emoji.nonQualified) &&
                 Objects.equals(docomo, emoji.docomo) && Objects.equals(au, emoji.au) && Objects.equals(softbank, emoji.softbank) && Objects.equals(google, emoji.google) && Objects.equals(image, emoji.image) &&
-                Objects.equals(short_name, emoji.short_name) && Objects.equals(short_names, emoji.short_names) && Objects.equals(text, emoji.text) && Objects.equals(texts, emoji.texts) &&
-                Objects.equals(category, emoji.category) && Objects.equals(subcategory, emoji.subcategory) && Objects.equals(added_in, emoji.added_in) &&
-                Objects.equals(skin_variations, emoji.skin_variations) && Objects.equals(obsoletes, emoji.obsoletes) && Objects.equals(obsoleted_by, emoji.obsoleted_by);
+                Objects.equals(shortName, emoji.shortName) && Objects.equals(shortNameList, emoji.shortNameList) && Objects.equals(text, emoji.text) && Objects.equals(textList, emoji.textList) &&
+                Objects.equals(category, emoji.category) && Objects.equals(subcategory, emoji.subcategory) && Objects.equals(addedIn, emoji.addedIn) &&
+                Objects.equals(skinVariationMap, emoji.skinVariationMap) && Objects.equals(obsoletes, emoji.obsoletes) && Objects.equals(obsoletedBy, emoji.obsoletedBy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, unified, non_qualified, docomo, au, softbank, google, image, sheet_x, sheet_y,
-                short_name, short_names, text, texts, category, subcategory, sort_order, added_in, has_img_apple, has_img_google, has_img_twitter, has_img_facebook,
-                skin_variations, obsoletes, obsoleted_by);
+        return Objects.hash(name, unified, nonQualified, docomo, au, softbank, google, image, sheetX, sheetY,
+                shortName, shortNameList, text, textList, category, subcategory, sortOrder, addedIn, hasImgApple, hasImgGoogle, hasImgTwitter, hasImgFacebook,
+                skinVariationMap, obsoletes, obsoletedBy);
     }
 
     @Override
@@ -668,29 +668,29 @@ public class Emoji {
         return "Emoji{" +
                 "name='" + name + '\'' +
                 ", unified='" + unified + '\'' +
-                ", non_qualified='" + non_qualified + '\'' +
+                ", nonQualified='" + nonQualified + '\'' +
                 ", docomo='" + docomo + '\'' +
                 ", au='" + au + '\'' +
                 ", softbank='" + softbank + '\'' +
                 ", google='" + google + '\'' +
                 ", image='" + image + '\'' +
-                ", sheet_x=" + sheet_x +
-                ", sheet_y=" + sheet_y +
-                ", short_name='" + short_name + '\'' +
-                ", short_names=" + short_names +
+                ", sheetX=" + sheetX +
+                ", sheetY=" + sheetY +
+                ", shortName='" + shortName + '\'' +
+                ", shortNameList=" + shortNameList +
                 ", text='" + text + '\'' +
-                ", texts=" + texts +
+                ", texts=" + textList +
                 ", category='" + category + '\'' +
                 ", subcategory='" + subcategory + '\'' +
-                ", sort_order=" + sort_order +
-                ", added_in='" + added_in + '\'' +
-                ", has_img_apple=" + has_img_apple +
-                ", has_img_google=" + has_img_google +
-                ", has_img_twitter=" + has_img_twitter +
-                ", has_img_facebook=" + has_img_facebook +
-                ", skin_variations=" + skin_variations +
+                ", sortOrder=" + sortOrder +
+                ", addedIn='" + addedIn + '\'' +
+                ", hasImgApple=" + hasImgApple +
+                ", hasImgGoogle=" + hasImgGoogle +
+                ", hasImgTwitter=" + hasImgTwitter +
+                ", hasImgFacebook=" + hasImgFacebook +
+                ", skinVariationMap=" + skinVariationMap +
                 ", obsoletes='" + obsoletes + '\'' +
-                ", obsoleted_by='" + obsoleted_by + '\'' +
+                ", obsoletedBy='" + obsoletedBy + '\'' +
                 '}';
     }
 
@@ -698,21 +698,21 @@ public class Emoji {
         int i = 0;
         Emoji emoji = new Emoji();
         emoji.name = v.get(i++);
-        emoji.unified = v.get(i++); emoji.non_qualified = getNullableField(v.get(i++));
+        emoji.unified = v.get(i++); emoji.nonQualified = getNullableField(v.get(i++));
         emoji.docomo = getNullableField(v.get(i++)); emoji.au = getNullableField(v.get(i++)); emoji.softbank = getNullableField(v.get(i++)); emoji.google = getNullableField(v.get(i++));
         emoji.image = v.get(i++);
-        emoji.sheet_x = Integer.parseInt(v.get(i++)); emoji.sheet_y = Integer.parseInt(v.get(i++));
-        emoji.short_name = v.get(i++);
-        emoji.short_names = parseListValues(v.get(i++));
+        emoji.sheetX = Integer.parseInt(v.get(i++)); emoji.sheetY = Integer.parseInt(v.get(i++));
+        emoji.shortName = v.get(i++);
+        emoji.shortNameList = parseListValues(v.get(i++));
         emoji.text = getNullableField(v.get(i++));
-        emoji.texts = parseListValues(v.get(i++));
+        emoji.textList = parseListValues(v.get(i++));
         emoji.category = v.get(i++); emoji.subcategory = v.get(i++);
-        emoji.sort_order = Integer.parseInt(v.get(i++)); emoji.added_in = v.get(i++);
-        emoji.has_img_apple = Boolean.parseBoolean(v.get(i++)); emoji.has_img_google = Boolean.parseBoolean(v.get(i++));
-        emoji.has_img_twitter = Boolean.parseBoolean(v.get(i++)); emoji.has_img_facebook = Boolean.parseBoolean(v.get(i++));
+        emoji.sortOrder = Integer.parseInt(v.get(i++)); emoji.addedIn = v.get(i++);
+        emoji.hasImgApple = Boolean.parseBoolean(v.get(i++)); emoji.hasImgGoogle = Boolean.parseBoolean(v.get(i++));
+        emoji.hasImgTwitter = Boolean.parseBoolean(v.get(i++)); emoji.hasImgFacebook = Boolean.parseBoolean(v.get(i++));
         parseSkinVariations(emoji, v.get(i++));
         emoji.obsoletes = getNullableField(v.get(i++));
-        emoji.obsoleted_by = getNullableField(v.get(i));
+        emoji.obsoletedBy = getNullableField(v.get(i));
         return emoji;
     }
 
@@ -739,22 +739,22 @@ public class Emoji {
             String tone = values[i++];
             skinEmoji.name = tone;
             skinEmoji.unified = values[i++];
-            skinEmoji.non_qualified = getNullableField(values[i++]);
+            skinEmoji.nonQualified = getNullableField(values[i++]);
             skinEmoji.image = values[i++];
-            skinEmoji.sheet_x = Integer.parseInt(values[i++]);
-            skinEmoji.sheet_y = Integer.parseInt(values[i++]);
-            skinEmoji.added_in = values[i++];
-            skinEmoji.has_img_apple = Boolean.parseBoolean(values[i++]);
-            skinEmoji.has_img_google = Boolean.parseBoolean(values[i++]);
-            skinEmoji.has_img_twitter = Boolean.parseBoolean(values[i++]);
-            skinEmoji.has_img_facebook = Boolean.parseBoolean(values[i++]);
+            skinEmoji.sheetX = Integer.parseInt(values[i++]);
+            skinEmoji.sheetY = Integer.parseInt(values[i++]);
+            skinEmoji.addedIn = values[i++];
+            skinEmoji.hasImgApple = Boolean.parseBoolean(values[i++]);
+            skinEmoji.hasImgGoogle = Boolean.parseBoolean(values[i++]);
+            skinEmoji.hasImgTwitter = Boolean.parseBoolean(values[i++]);
+            skinEmoji.hasImgFacebook = Boolean.parseBoolean(values[i++]);
             if (values.length > 11) {
                 skinEmoji.obsoletes = getNullableField(values[i++]);
                 if (values.length > 12) {
-                    skinEmoji.obsoleted_by = getNullableField(values[i]);
+                    skinEmoji.obsoletedBy = getNullableField(values[i]);
                 }
             }
-            emoji.skin_variations.put(tone, skinEmoji);
+            emoji.skinVariationMap.put(tone, skinEmoji);
         });
     }
 }

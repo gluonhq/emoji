@@ -74,14 +74,14 @@ public class EmojiData {
                 try {
                     Emoji e = Emoji.parseEmojiFromCSVList(values);
                     EMOJI_UNICODE_MAP.put(e.getUnified(), e);
-                    e.getShort_name().ifPresent(s -> EMOJI_MAP.put(s, e));
-                    if (e.getSkin_variations() != null) {
-                        e.getSkin_variations().values()
+                    e.getShortName().ifPresent(s -> EMOJI_MAP.put(s, e));
+                    if (e.getSkinVariationMap() != null) {
+                        e.getSkinVariationMap().values()
                                 .forEach(v -> {
                                     e.getName().ifPresent(name -> v.setName(name + ": " +
                                             v.getName().map(EmojiSkinTone::getSkinVariationName).orElse("")));
                                     EMOJI_UNICODE_MAP.put(v.getUnified(), v);
-                                    v.getShort_name().ifPresent(s -> EMOJI_MAP.put(s, v));
+                                    v.getShortName().ifPresent(s -> EMOJI_MAP.put(s, v));
                                 });
                     }
                 } catch (Exception ex) {
@@ -133,7 +133,7 @@ public class EmojiData {
         return EMOJI_MAP.values().stream()
                 .filter(emoji -> emoji.getCategory().isPresent())
                 .filter(emoji -> category.contains(emoji.getCategory().get()))
-                .sorted(Comparator.comparingInt(Emoji::getSort_order))
+                .sorted(Comparator.comparingInt(Emoji::getSortOrder))
                 .collect(Collectors.toList());
     }
     
@@ -143,7 +143,7 @@ public class EmojiData {
             emojis.addAll(EMOJI_MAP.entrySet().stream()
                     .filter(es -> es.getKey().contains(s))
                     .map(Map.Entry::getValue)
-                    .sorted(Comparator.comparingInt(Emoji::getSort_order))
+                    .sorted(Comparator.comparingInt(Emoji::getSortOrder))
                     .collect(Collectors.toList()));
         }
         return emojis;
@@ -179,18 +179,18 @@ public class EmojiData {
     public static Emoji copyEmoji(Emoji other) {
         Emoji emoji = new Emoji();
         emoji.setUnified(other.getUnified());
-        other.getShort_name().ifPresent(emoji::setShort_name);
-        emoji.setShort_names(other.getShort_names());
+        other.getShortName().ifPresent(emoji::setShortName);
+        emoji.setShortNameList(other.getShortNameList());
         other.getCategory().ifPresent(emoji::setCategory);
-        emoji.setSheet_x(other.getSheet_x());
-        emoji.setSheet_y(other.getSheet_y());
-        emoji.setSkin_variations(other.getSkin_variations());
+        emoji.setSheetX(other.getSheetX());
+        emoji.setSheetY(other.getSheetY());
+        emoji.setSkinVariationMap(other.getSkinVariationMap());
         return emoji;
     }
 
     public static Emoji emojiWithTone(Emoji emoji, EmojiSkinTone tone) {
-        return (emoji != null && emoji.getSkin_variations() != null && tone != EmojiSkinTone.NO_SKIN_TONE) ?
-                emoji.getSkin_variations().getOrDefault(tone.getUnicode(), emoji) :
+        return (emoji != null && emoji.getSkinVariationMap() != null && tone != EmojiSkinTone.NO_SKIN_TONE) ?
+                emoji.getSkinVariationMap().getOrDefault(tone.getUnicode(), emoji) :
                 emoji;
     }
 
@@ -207,7 +207,7 @@ public class EmojiData {
     }
 
     public static Emoji emojiWithoutTone(Emoji emoji, EmojiSkinTone tone) {
-        if (emoji != null && emoji.getSkin_variations() != null && tone != EmojiSkinTone.NO_SKIN_TONE) {
+        if (emoji != null && emoji.getSkinVariationMap() != null && tone != EmojiSkinTone.NO_SKIN_TONE) {
             if (emoji.getUnified().endsWith("-" + tone.getUnicode())) {
                 String noTone = emoji.getUnified().substring(0, emoji.getUnified().length() - tone.getUnicode().length() - 1);
                 return emojiFromCodepoints(noTone).orElse(emoji);

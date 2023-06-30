@@ -82,10 +82,10 @@ public class Demo extends Application {
     private static String getAllEmojisAsUnicodeString() {
         return EmojiData.emojiValues().stream()
                 .sorted((e1, e2) -> {
-                    if (e1.getSheet_y() == e2.getSheet_y()) {
-                        return Integer.compare(e1.getSheet_x(), e2.getSheet_x());
+                    if (e1.getSheetY() == e2.getSheetY()) {
+                        return Integer.compare(e1.getSheetX(), e2.getSheetX());
                     }
-                    return Integer.compare(e1.getSheet_y(), e2.getSheet_y());
+                    return Integer.compare(e1.getSheetY(), e2.getSheetY());
                 })
                 .map(Emoji::character)
                 // optional: add a delimiter like `|` to separate emojis
