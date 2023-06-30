@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * The Emoji class holds all the parameters that define an Emoji object,
+ * The Emoji class holds all the parameters that define an Emoji instance,
  * like its name, unified codepoints, x and y positions of the emoji image that
  * can be located in a sprite sheet, or category and alternative emojis.
  */
