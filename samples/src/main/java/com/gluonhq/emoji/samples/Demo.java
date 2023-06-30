@@ -80,7 +80,7 @@ public class Demo extends Application {
      * @return a text string
      */
     private static String getAllEmojisAsUnicodeString() {
-        return EmojiData.emojiValues().stream()
+        return EmojiData.getEmojiCollection().stream()
                 .sorted((e1, e2) -> {
                     if (e1.getSheetY() == e2.getSheetY()) {
                         return Integer.compare(e1.getSheetX(), e2.getSheetX());

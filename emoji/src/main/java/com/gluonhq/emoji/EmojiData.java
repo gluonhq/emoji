@@ -43,6 +43,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Processes all emojis available (including skin variations), and generates two maps:
+ * one map with emoji's shortName as key, the other with emoji's unified as key,
+ * providing utility methods to get collections of emojis or single emojis for a given
+ * criteria.
+ */
 public class EmojiData {
 
     private static final Logger LOG = Logger.getLogger(EmojiData.class.getName());
@@ -92,9 +98,11 @@ public class EmojiData {
     }
 
     /**
-     * Returns Emoji from unicode string
+     * Returns Emoji from unicode string, or empty if not found.
+     * For instance, a string like "\uD83D\uDC4B" will return the "wave" emoji ("1F44B")
+     *
      * @param unicodeText Unicode string representation
-     * @return Emoji found for the string
+     * @return Emoji found for the string, or empty
      */
     public static Optional<Emoji> emojiFromUnicodeString(String unicodeText) {
         return EMOJI_MAP.values().stream()
@@ -104,8 +112,10 @@ public class EmojiData {
 
     /**
      * Returns Emoji from its hex code point string representation.
+     * For instance, for "1F44B-1F3FC" it will return the "wave" with medium light skin emoji.
+     *
      * @param codePoint A string of one or more hex code points, concatenated using "-".
-     * @return Emoji found for the codepoint string
+     * @return Emoji found for the codepoint string, or empty
      */
     public static Optional<Emoji> emojiFromCodepoints(String codePoint) {
         Emoji value = EMOJI_UNICODE_MAP.get(codePoint);
@@ -116,24 +126,62 @@ public class EmojiData {
         return Optional.ofNullable(value);
     }
 
+    /**
+     * Returns Emoji from shortName string, or empty if not found.
+     * For instance, a string like "wave" will return the "wave" emoji ("1F44B")
+     *
+     * @param shortName Short name string
+     * @return Emoji found for the string, or empty
+     */
     public static Optional<Emoji> emojiFromShortName(String shortName) {
         return Optional.ofNullable(EMOJI_MAP.get(shortName));        
     }
 
-    public static Optional<Emoji> emojiFromCodeName(String text) {
-        if (text.startsWith(":") && text.endsWith(":")) {
-            return emojiFromShortName(text.substring(1, text.length() - 1));
+    /**
+     * Returns Emoji from code name string, or empty if not found.
+     * For instance, a string like ":wave:" will return the "wave" emoji ("1F44B")
+     *
+     * @param codeName Short name string wrapped with ":"
+     * @return Emoji found for the string, or empty
+     */
+    public static Optional<Emoji> emojiFromCodeName(String codeName) {
+        if (codeName.startsWith(":") && codeName.endsWith(":")) {
+            return emojiFromShortName(codeName.substring(1, codeName.length() - 1));
         }
         return Optional.empty();
     }
 
+    /**
+     * For a given shortName, returns an optional with the unicode character
+     * representation of the emoji if exists, or empty otherwise
+     *
+     * @param shortName Short name string
+     * @return an optional with the emoji's character, or empty
+     */
+    public static Optional<String> emojiForText(String shortName) {
+        return emojiFromShortName(shortName).map(Emoji::character);
+    }
+
+    /**
+     * Returns a list of emojis for a category string, sorted by emoji's sort order.
+     *
+     * @param category Category string
+     * @return List of Emoji found for the category
+     */
     public static List<Emoji> emojiFromCategory(String category) {
         return EMOJI_MAP.values().stream()
                 .filter(emoji -> category.contains(emoji.getCategory()))
                 .sorted(Comparator.comparingInt(Emoji::getSortOrder))
                 .collect(Collectors.toList());
     }
-    
+
+    /**
+     * Returns a list of emojis for which their shortName contains a given text string,
+     * sorted by emoji's sort order.
+     *
+     * @param text text string
+     * @return List of Emoji found for the text string
+     */
     public static List<Emoji> search(String text) {
         List<Emoji> emojis = new ArrayList<>();
         for (String s : text.split(" ")) {
@@ -145,56 +193,122 @@ public class EmojiData {
         }
         return emojis;
     }
-    
-    public static Set<String> shortNames() {
+
+    /**
+     * Returns a set with the shortNames of all emojis
+     *
+     * @return a set with the shortNames of all emojis
+     */
+    public static Set<String> shortNamesSet() {
         return EMOJI_MAP.keySet();
     }
-    
-    public static Collection<Emoji> emojiValues() {
+
+    /**
+     * Returns the collection of all emojis
+     *
+     * @return the collection of all emojis
+     */
+    public static Collection<Emoji> getEmojiCollection() {
         return EMOJI_UNICODE_MAP.values();
     }
 
+    /**
+     * Returns a set with the categories of all emojis
+     *
+     * @return a set with the categories of all emojis
+     */
     public static Set<String> categories() {
         return EMOJI_MAP.values().stream()
                 .map(Emoji::getCategory)
                 .collect(Collectors.toSet());
     }
-    
-    public static String emojiForText(String shortName) {
-        return emojiForText(shortName, false);
-    }
 
-    public static String emojiForText(String shortName, boolean strip) {
-        final Emoji emoji = EMOJI_MAP.get(shortName);
-        if (emoji == null) {
-            return strip ? "" : shortName;
-        }
-        else return emoji.character();
-    }
-
+    /**
+     * Returns a new Emoji object, with the same most significant fields of another Emoji object
+     *
+     * @param other the Emoji object to copy
+     * @return an Emoji object
+     */
     public static Emoji copyEmoji(Emoji other) {
         Emoji emoji = new Emoji();
+        emoji.setName(other.getName());
         emoji.setUnified(other.getUnified());
         emoji.setShortName(other.getShortName());
         emoji.setShortNameList(other.getShortNameList());
         emoji.setCategory(other.getCategory());
         emoji.setSheetX(other.getSheetX());
         emoji.setSheetY(other.getSheetY());
+        emoji.setSortOrder(other.getSortOrder());
         emoji.setSkinVariationMap(other.getSkinVariationMap());
         return emoji;
     }
 
+    /**
+     * For a given emoji, returns a possible emoji variation with a given skin tone, or
+     * the same emoji, if not found
+     * For instance, for the emoji "1F44B", and tone "1F3FC", returns the emoji "1F44B-1F3FC"
+     *
+     * @param emoji an emoji without tone
+     * @param tone the skin variation tone
+     * @return an emoji with the skin variation tone, or the original emoji if not found
+     */
     public static Emoji emojiWithTone(Emoji emoji, EmojiSkinTone tone) {
-        return (emoji != null && emoji.getSkinVariationMap() != null && tone != EmojiSkinTone.NO_SKIN_TONE) ?
-                emoji.getSkinVariationMap().getOrDefault(tone.getUnicode(), emoji) :
-                emoji;
+        return emojiWithTone(emoji, tone, tone);
     }
 
+    /**
+     * For a given emoji, returns a possible emoji variation with a given couple of skin tones, or
+     * the same emoji, if not found
+     * For instance, for the emoji "1F9D1-200D-1F91D-200D-1F9D1", and tones "1F3FC" and "1F3FD",
+     * returns the emoji variation "1F9D1-1F3FC-200D-1F91D-200D-1F9D1-1F3FD"
+     *
+     * @param emoji an emoji without tone
+     * @param tone1 the first skin variation tone
+     * @param tone2 the second skin variation tone
+     * @return an emoji with the skin variations, or the original emoji if not found
+     */
+    public static Emoji emojiWithTone(Emoji emoji, EmojiSkinTone tone1, EmojiSkinTone tone2) {
+        if (emoji == null) {
+            return null;
+        }
+        if (tone1 == EmojiSkinTone.NO_SKIN_TONE || tone2 == EmojiSkinTone.NO_SKIN_TONE) {
+            return emoji;
+        }
+        Map<String, Emoji> skinVariationMap = emoji.getSkinVariationMap();
+        if (skinVariationMap != null) {
+            String skinTone1 = tone1.getUnicode();
+            String skinTone2 = tone2.getUnicode();
+            if (skinTone1.equals(skinTone2)) {
+                if (skinVariationMap.containsKey(skinTone1)) {
+                    // simple tone
+                    return skinVariationMap.getOrDefault(skinTone1, emoji);
+                }
+                if (skinVariationMap.containsKey(skinTone1 + "-" + skinTone1)) {
+                    // double tone, but equal tone in both sides
+                    return skinVariationMap.getOrDefault(skinTone1 + "-" + skinTone1, emoji);
+                }
+            } else {
+                if (skinVariationMap.containsKey(skinTone1 + "-" + skinTone2)) {
+                    // double tone
+                    return skinVariationMap.getOrDefault(skinTone1 + "-" + skinTone2, emoji);
+                }
+            }
+        }
+        return emoji;
+    }
+
+    /**
+     * For a given emoji variation with a possible skin tone, finds the emoji without any skin tone
+     * For instance, for the emoji "1F44B-1F3FC", returns the emoji "1F44B"
+     *
+     * @param emoji the emoji variation
+     * @return an emoji without skin tone
+     */
     public static Emoji emojiWithoutDefinedTone(Emoji emoji) {
         for (EmojiSkinTone tone : EmojiSkinTone.values()) {
             if (tone != EmojiSkinTone.NO_SKIN_TONE) {
                 Emoji e = emojiWithoutTone(emoji, tone);
-                if (e != null) {
+                if (e != null && !e.equals(emoji)) {
                     return e;
                 }
             }
@@ -202,15 +316,24 @@ public class EmojiData {
         return emoji;
     }
 
+    /**
+     * For a given emoji variation with a given skin tone, finds the emoji without skin tone
+     * For instance, for the emoji "1F44B-1F3FC", and tone "1F3FC", returns the emoji "1F44B"
+     *
+     * @param emoji the emoji variation
+     * @param tone the skin tone
+     * @return an emoji without skin tone
+     */
     public static Emoji emojiWithoutTone(Emoji emoji, EmojiSkinTone tone) {
-        if (emoji != null && emoji.getSkinVariationMap() != null && tone != EmojiSkinTone.NO_SKIN_TONE) {
-            if (emoji.getUnified().endsWith("-" + tone.getUnicode())) {
-                String noTone = emoji.getUnified().substring(0, emoji.getUnified().length() - tone.getUnicode().length() - 1);
+        if (emoji != null && tone != EmojiSkinTone.NO_SKIN_TONE) {
+            String skinTone = tone.getUnicode();
+            if (emoji.getUnified().endsWith("-" + skinTone)) {
+                String noTone = emoji.getUnified().substring(0, emoji.getUnified().length() - skinTone.length() - 1);
                 return emojiFromCodepoints(noTone).orElse(emoji);
-            } else if (emoji.getUnified().contains("-" + tone.getUnicode() + "-")) {
-                String noToneNonQualified = emoji.getUnified().replace("-" + tone.getUnicode() + "-", "-");
+            } else if (emoji.getUnified().contains("-" + skinTone + "-")) {
+                String noToneNonQualified = emoji.getUnified().replace("-" + skinTone + "-", "-");
                 return emojiFromCodepoints(noToneNonQualified).orElseGet(() -> {
-                    String noToneQualified = emoji.getUnified().replace("-" + tone.getUnicode() + "-", "-FE0F-");
+                    String noToneQualified = emoji.getUnified().replace("-" + skinTone + "-", "-FE0F-");
                     return emojiFromCodepoints(noToneQualified).orElse(emoji);
                 });
             }

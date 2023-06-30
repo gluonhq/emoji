@@ -29,11 +29,25 @@ package com.gluonhq.emoji;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import static com.gluonhq.emoji.EmojiData.categories;
+import static com.gluonhq.emoji.EmojiData.copyEmoji;
 import static com.gluonhq.emoji.EmojiData.emojiForText;
+import static com.gluonhq.emoji.EmojiData.emojiFromCategory;
 import static com.gluonhq.emoji.EmojiData.emojiFromCodeName;
 import static com.gluonhq.emoji.EmojiData.emojiFromCodepoints;
+import static com.gluonhq.emoji.EmojiData.emojiFromShortName;
+import static com.gluonhq.emoji.EmojiData.emojiFromUnicodeString;
+import static com.gluonhq.emoji.EmojiData.emojiWithTone;
+import static com.gluonhq.emoji.EmojiData.emojiWithoutDefinedTone;
+import static com.gluonhq.emoji.EmojiData.emojiWithoutTone;
+import static com.gluonhq.emoji.EmojiData.getEmojiCollection;
+import static com.gluonhq.emoji.EmojiData.search;
+import static com.gluonhq.emoji.EmojiData.shortNamesSet;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,33 +57,49 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class EmojiDataTest {
 
     @Test
+    public void emojiForShortNameTest() {
+        Optional<Emoji> wavingHands = emojiFromShortName("wave");
+        assertTrue(wavingHands.isPresent());
+        Emoji emoji = assertDoesNotThrow(wavingHands::get);
+        assertNotNull(emoji);
+        assertEquals("1F44B", emoji.getUnified());
+        assertEquals("\uD83D\uDC4B", emoji.character());
+    }
+
+    @Test
     public void emojiForTextKnown() {
-        assertEquals("😄", emojiForText("smile"));
+        assertTrue(emojiForText("smile").isPresent());
+        assertEquals("😄", emojiForText("smile").get());
     }
 
     @Test
     public void emojiForTextUnknown() {
-        assertEquals("unknown", emojiForText("unknown"));
+        assertFalse(emojiForText("unknown").isPresent());
+        assertEquals(Optional.empty(), emojiForText("unknown"));
     }
 
     @Test
-    public void emojiForTextStripForKnown() {
-        assertEquals("😄", emojiForText("smile", true));
-    }
-
-    @Test
-    public void emojiForTextStripForUnknown() {
-        assertEquals("", emojiForText("unknown", true));
-    }
-
-    @Test
-    public void emojiForColonTextTest() {
-        assertNotNull(emojiFromCodeName(":smile:"));
-        assertNotNull(emojiFromCodeName(":kissing:"));
+    public void emojiForCodeNameTest() {
+        Optional<Emoji> smile = emojiFromCodeName(":smile:");
+        assertNotNull(smile);
+        assertTrue(smile.isPresent());
+        Emoji emoji = assertDoesNotThrow(smile::get);
+        assertNotNull(emoji);
+        assertEquals("1F604", emoji.getUnified());
     }
 
     @Test
     public void emojiFromUnicodeTest() {
+        Optional<Emoji> wavingHands = emojiFromUnicodeString("\uD83D\uDC4B");
+        assertTrue(wavingHands.isPresent());
+        Emoji emoji = assertDoesNotThrow(wavingHands::get);
+        assertNotNull(emoji);
+        assertEquals("1F44B", emoji.getUnified());
+        assertEquals("\uD83D\uDC4B", emoji.character());
+    }
+
+    @Test
+    public void emojiFromCodepointsTest() {
         Optional<Emoji> wavingHands = emojiFromCodepoints("1F44B");
         assertFalse(wavingHands.isEmpty());
         Emoji emoji = assertDoesNotThrow(wavingHands::get);
@@ -118,5 +148,106 @@ public class EmojiDataTest {
     public void invalidTwoFlagsUnicodeTest() {
         Optional<Emoji> twoFlags = emojiFromCodepoints("1F1E6-1F1E8-1F1E6-1F1E9");
         assertTrue(twoFlags.isEmpty());
+    }
+
+    @Test
+    public void emojiFromCategoryTest() {
+        List<Emoji> categoryList = emojiFromCategory("People & Body");
+        assertFalse(categoryList.isEmpty());
+        assertTrue(categoryList.size() > 2000);
+        List<Emoji> emptyList = emojiFromCategory("People&Body");
+        assertTrue(emptyList.isEmpty());
+    }
+
+    @Test
+    public void searchTest() {
+        List<Emoji> emojiList = search("wales");
+        assertFalse(emojiList.isEmpty());
+        assertTrue(emojiList.size() == 1);
+        List<Emoji> emptyList = search("nothing");
+        assertTrue(emptyList.isEmpty());
+    }
+
+    @Test
+    public void shortNamesSetTest() {
+        Set<String> set = shortNamesSet();
+        assertFalse(set.isEmpty());
+        assertTrue(set.size() > 3000);
+    }
+
+    @Test
+    public void emojiCollectionTest() {
+        Collection<Emoji> list = getEmojiCollection();
+        assertFalse(list.isEmpty());
+        assertTrue(list.size() > 3000);
+    }
+
+    @Test
+    public void categoriesTest() {
+        Set<String> set = categories();
+        assertFalse(set.isEmpty());
+        assertEquals(10, set.size());
+    }
+
+    @Test
+    public void copyEmojiTest() {
+        Optional<Emoji> wavingHands = emojiFromCodepoints("1F44B");
+        assertFalse(wavingHands.isEmpty());
+        Emoji emoji = assertDoesNotThrow(wavingHands::get);
+        assertNotNull(emoji);
+        assertEquals("1F44B", emoji.getUnified());
+        assertEquals("\uD83D\uDC4B", emoji.character());
+        Emoji copy = copyEmoji(emoji);
+        assertEquals("1F44B", copy.getUnified());
+        assertEquals("\uD83D\uDC4B", copy.character());
+    }
+
+    @Test
+    public void emojiWithToneTest() {
+        Optional<Emoji> wavingHands = emojiFromCodepoints("1F44B");
+        assertFalse(wavingHands.isEmpty());
+        Emoji emoji = assertDoesNotThrow(wavingHands::get);
+        assertNotNull(emoji);
+        assertEquals("1F44B", emoji.getUnified());
+        Emoji emojiTone = emojiWithTone(emoji, EmojiSkinTone.MEDIUM_LIGHT_SKIN_TONE);
+        assertEquals("1F44B-1F3FC", emojiTone.getUnified());
+    }
+
+    @Test
+    public void emojiWithTwoTonesTest() {
+        Optional<Emoji> peopleHoldingHands = emojiFromCodepoints("1F9D1-200D-1F91D-200D-1F9D1");
+        assertFalse(peopleHoldingHands.isEmpty());
+        Emoji emoji = assertDoesNotThrow(peopleHoldingHands::get);
+        assertNotNull(emoji);
+        assertEquals("1F9D1-200D-1F91D-200D-1F9D1", emoji.getUnified());
+        Emoji emojiTone = emojiWithTone(emoji, EmojiSkinTone.MEDIUM_LIGHT_SKIN_TONE, EmojiSkinTone.MEDIUM_SKIN_TONE);
+        assertEquals("1F9D1-1F3FC-200D-1F91D-200D-1F9D1-1F3FD", emojiTone.getUnified());
+    }
+
+    @Test
+    public void emojiWithoutToneTest() {
+        Optional<Emoji> wavingHandsTone = emojiFromCodepoints("1F44B-1F3FC");
+        assertFalse(wavingHandsTone.isEmpty());
+        Emoji emojiTone = assertDoesNotThrow(wavingHandsTone::get);
+        assertNotNull(emojiTone);
+        assertTrue(emojiTone.getSkinVariationMap().isEmpty());
+        assertEquals("1F44B-1F3FC", emojiTone.getUnified());
+        Emoji emoji = emojiWithoutTone(emojiTone, EmojiSkinTone.MEDIUM_LIGHT_SKIN_TONE);
+        assertNotNull(emoji);
+        assertEquals("1F44B", emoji.getUnified());
+    }
+
+    @Test
+    public void emojiWithoutDefinedToneTest() {
+        Optional<Emoji> wavingHandsTone = emojiFromCodepoints("1F44B-1F3FC");
+        assertFalse(wavingHandsTone.isEmpty());
+        Emoji emojiTone = assertDoesNotThrow(wavingHandsTone::get);
+        assertNotNull(emojiTone);
+        assertTrue(emojiTone.getSkinVariationMap().isEmpty());
+        assertEquals("1F44B-1F3FC", emojiTone.getUnified());
+        Emoji emoji = emojiWithoutDefinedTone(emojiTone);
+        assertNotNull(emoji);
+        assertEquals("1F44B", emoji.getUnified());
+        assertFalse(emoji.getSkinVariationMap().isEmpty());
     }
 }
