@@ -58,7 +58,7 @@ public class Demo extends Application {
                 .forEach(node -> {
                     String unified = (String) node.getProperties().get(EmojiImageUtils.IMAGE_VIEW_EMOJI_PROPERTY);
                     EmojiData.emojiFromCodepoints(unified).ifPresent(emoji ->
-                            Tooltip.install(node, new Tooltip("Emoji: " + emoji.getName().orElse("") + "\n" + unified)));
+                            Tooltip.install(node, new Tooltip("Emoji: " + emoji.getName() + "\n" + unified)));
                 });
         // Add nodes to textFlow
         TextFlow textFlow = new TextFlow();

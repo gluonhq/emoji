@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -96,12 +95,12 @@ public class Emoji {
     private String obsoletedBy;
 
     /**
-     * Gets an optional with the official Unicode name, like "SMILING FACE WITH OPEN MOUTH AND SMILING EYES".
+     * Gets the official Unicode name, like "SMILING FACE WITH OPEN MOUTH AND SMILING EYES".
      *
-     * @return an optional with the name of the emoji or empty
+     * @return a string with the name of the emoji
      */
-    public Optional<String> getName() {
-        return name == null ? Optional.empty() : Optional.of(name);
+    public String getName() {
+        return name;
     }
 
     /**
@@ -158,18 +157,19 @@ public class Emoji {
     }
 
     /**
-     * Gets an optional with the legacy Unicode codepoints used by NTT Docomo (previously styled as DoCoMo),
-     * a Japanese phone carrier, or empty.
+     * Gets the legacy Unicode codepoints used by NTT Docomo (previously styled as DoCoMo),
+     * a Japanese phone carrier, or null.
      * For instance,for THUMBS UP SIGN ("1F44D"), the docomo version is "E727".
      *
-     * @return an optional with the docomo codepoints of the emoji or empty
+     * @return the docomo codepoints of the emoji, or null
      */
-    public Optional<String> getDocomo() {
-        return docomo == null ? Optional.empty() : Optional.of(docomo);
+    public String getDocomo() {
+        return docomo;
     }
 
     /**
-     * Sets the legacy Unicode codepoints used by NTT Docomo (previously styled as DoCoMo), a Japanese phone carrier.
+     * Sets the legacy Unicode codepoints used by NTT Docomo (previously styled as DoCoMo),
+     * a Japanese phone carrier, or null.
      * For instance,for THUMBS UP SIGN ("1F44D"), the docomo version is "E727".
      *
      * @param docomo a string with the docomo codepoints, or null
@@ -179,13 +179,13 @@ public class Emoji {
     }
 
     /**
-     * Gets an optional with the legacy Unicode codepoints used by au by KDDI, a Japanese phone carrier.
+     * Gets the legacy Unicode codepoints used by au by KDDI, a Japanese phone carrier.
      * For instance,for THUMBS UP SIGN ("1F44D"), the au version is "E4F9".
      *
-     * @return an optional with the docomo codepoints of the emoji or empty
+     * @return the docomo codepoints of the emoji, or null
      */
-    public Optional<String> getAu() {
-        return au == null ? Optional.empty() : Optional.of(au);
+    public String getAu() {
+        return au;
     }
 
     /**
@@ -199,13 +199,13 @@ public class Emoji {
     }
 
     /**
-     * Gets an optional with the legacy Unicode codepoints used by SoftBank, a Japanese phone carrier.
+     * Gets the legacy Unicode codepoints used by SoftBank, a Japanese phone carrier, or null.
      * For instance,for THUMBS UP SIGN ("1F44D"), the softbank version is "E00E".
      *
-     * @return an optional with the docomo codepoints of the emoji or empty
+     * @return the docomo codepoints of the emoji, or null
      */
-    public Optional<String> getSoftbank() {
-        return softbank == null ? Optional.empty() : Optional.of(softbank);
+    public String getSoftbank() {
+        return softbank;
     }
 
     /**
@@ -219,13 +219,13 @@ public class Emoji {
     }
 
     /**
-     * Gets an optional with the legacy Unicode codepoints used by Google on Android devices.
+     * Gets the legacy Unicode codepoints used by Google on Android devices, or null.
      * For instance,for THUMBS UP SIGN ("1F44D"), the google version is "FEB97".
      *
-     * @return an optional with the google codepoints of the emoji or empty
+     * @return the google codepoints of the emoji or empty
      */
-    public Optional<String> getGoogle() {
-        return google == null ? Optional.empty() : Optional.of(google);
+    public String getGoogle() {
+        return google;
     }
 
     /**
@@ -239,12 +239,12 @@ public class Emoji {
     }
 
     /**
-     * Gets an optional with the name of the image file, like "1f604.png".
+     * Gets the name of the image file, like "1f604.png".
      *
-     * @return an optional with the name of the image file or empty
+     * @return the name of the image file
      */
-    public Optional<String> getImage() {
-        return image == null ? Optional.empty() : Optional.of(image);
+    public String getImage() {
+        return image;
     }
 
     /**
@@ -297,13 +297,13 @@ public class Emoji {
     }
 
     /**
-     * Gets an optional with the common short name of the emoji.
+     * Gets the common short name of the emoji.
      * For instance, the short name for "1F604" is "smile".
      *
-     * @return an optional with the common short name of the emoji or empty
+     * @return the common short name of the emoji
      */
-    public Optional<String> getShortName() {
-        return shortName == null? Optional.empty() : Optional.of(shortName);
+    public String getShortName() {
+        return shortName;
     }
 
     /**
@@ -320,10 +320,10 @@ public class Emoji {
      * Gets the common short name of the emoji wrapped with colons.
      * For instance, the code name for "1F604" is ":smile:".
      *
-     * @return the common short name of the emoji wrapped with colons or empty
+     * @return the common short name of the emoji wrapped with colons
      */
     public String getCodeName() {
-        return getShortName().isPresent() ? ":" + getShortName().get() + ":" : "";
+        return ":" + getShortName() + ":";
     }
 
     /**
@@ -386,13 +386,13 @@ public class Emoji {
     }
 
     /**
-     * Gets an optional with the category group name.
+     * Gets the category group name.
      * For instance, "1F604" belongs to "Smileys & Emotion" category.
      *
-     * @return an optional with the category group name of the emoji or empty
+     * @return the category group name of the emoji or empty
      */
-    public Optional<String> getCategory() {
-        return category == null? Optional.empty() : Optional.of(category);
+    public String getCategory() {
+        return category;
     }
 
     /**
@@ -737,7 +737,7 @@ public class Emoji {
             String[] values = skinTone.split(FIELDS_SKIN_DELIMITER);
             int i = 0;
             String tone = values[i++];
-            skinEmoji.name = tone;
+            skinEmoji.name = emoji.getName() + ":" + EmojiSkinTone.getSkinVariationName(tone);
             skinEmoji.unified = values[i++];
             skinEmoji.nonQualified = getNullableField(values[i++]);
             skinEmoji.image = values[i++];

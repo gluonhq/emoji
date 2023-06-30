@@ -48,7 +48,7 @@ public class EmojiData {
     private static final Logger LOG = Logger.getLogger(EmojiData.class.getName());
 
     /**
-     * Map that stores emojis with their short name as key.
+     * Map that stores emojis with their shortName as key.
      */
     private static final Map<String, Emoji> EMOJI_MAP = new HashMap<>();
 
@@ -74,14 +74,12 @@ public class EmojiData {
                 try {
                     Emoji e = Emoji.parseEmojiFromCSVList(values);
                     EMOJI_UNICODE_MAP.put(e.getUnified(), e);
-                    e.getShortName().ifPresent(s -> EMOJI_MAP.put(s, e));
+                    EMOJI_MAP.put(e.getShortName(), e);
                     if (e.getSkinVariationMap() != null) {
                         e.getSkinVariationMap().values()
                                 .forEach(v -> {
-                                    e.getName().ifPresent(name -> v.setName(name + ": " +
-                                            v.getName().map(EmojiSkinTone::getSkinVariationName).orElse("")));
                                     EMOJI_UNICODE_MAP.put(v.getUnified(), v);
-                                    v.getShortName().ifPresent(s -> EMOJI_MAP.put(s, v));
+                                    EMOJI_MAP.put(v.getShortName(), v);
                                 });
                     }
                 } catch (Exception ex) {
@@ -131,8 +129,7 @@ public class EmojiData {
 
     public static List<Emoji> emojiFromCategory(String category) {
         return EMOJI_MAP.values().stream()
-                .filter(emoji -> emoji.getCategory().isPresent())
-                .filter(emoji -> category.contains(emoji.getCategory().get()))
+                .filter(emoji -> category.contains(emoji.getCategory()))
                 .sorted(Comparator.comparingInt(Emoji::getSortOrder))
                 .collect(Collectors.toList());
     }
@@ -159,8 +156,7 @@ public class EmojiData {
 
     public static Set<String> categories() {
         return EMOJI_MAP.values().stream()
-                .filter(emoji -> emoji.getCategory().isPresent())
-                .map(emoji -> emoji.getCategory().get())
+                .map(Emoji::getCategory)
                 .collect(Collectors.toSet());
     }
     
@@ -179,9 +175,9 @@ public class EmojiData {
     public static Emoji copyEmoji(Emoji other) {
         Emoji emoji = new Emoji();
         emoji.setUnified(other.getUnified());
-        other.getShortName().ifPresent(emoji::setShortName);
+        emoji.setShortName(other.getShortName());
         emoji.setShortNameList(other.getShortNameList());
-        other.getCategory().ifPresent(emoji::setCategory);
+        emoji.setCategory(other.getCategory());
         emoji.setSheetX(other.getSheetX());
         emoji.setSheetY(other.getSheetY());
         emoji.setSkinVariationMap(other.getSkinVariationMap());

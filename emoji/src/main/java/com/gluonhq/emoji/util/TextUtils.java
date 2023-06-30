@@ -182,7 +182,7 @@ public class TextUtils {
 
     private static boolean isPersonEmoji(int ch) {
         return "People & Body".equals(EmojiData.emojiFromCodepoints(String.format("%04X", ch))
-                        .flatMap(Emoji::getCategory).orElse(""));
+                        .map(Emoji::getCategory).orElse(""));
     }
 
     private static boolean isEmojiConnector(int ch) {
