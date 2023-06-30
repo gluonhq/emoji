@@ -743,6 +743,11 @@ public class Emoji {
             skinEmoji.image = values[i++];
             skinEmoji.sheetX = Integer.parseInt(values[i++]);
             skinEmoji.sheetY = Integer.parseInt(values[i++]);
+            skinEmoji.shortName = emoji.getShortName() + ":" + tone;
+            skinEmoji.shortNameList = List.of(skinEmoji.shortName);
+            skinEmoji.category = emoji.getCategory();
+            skinEmoji.subcategory = emoji.getSubcategory();
+            skinEmoji.sortOrder = emoji.getSortOrder();
             skinEmoji.addedIn = values[i++];
             skinEmoji.hasImgApple = Boolean.parseBoolean(values[i++]);
             skinEmoji.hasImgGoogle = Boolean.parseBoolean(values[i++]);
