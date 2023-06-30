@@ -69,6 +69,19 @@ public class TextUtilTest {
         assertEquals("1F44B-1F3FC", emoji.getUnified());
     }
 
+    @Test
+    public void emojiTwoTonesFromStringTest() {
+        List<Object> peopleHoldingHands = convertToStringAndEmojiObjects(
+                "\uD83E\uDDD1\uD83C\uDFFC\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1\uD83C\uDFFD");
+        assertFalse(peopleHoldingHands.isEmpty());
+        assertEquals(1, peopleHoldingHands.size());
+        Object peopleHoldingHandsObject = peopleHoldingHands.get(0);
+        assertTrue(peopleHoldingHandsObject instanceof Emoji);
+        Emoji emoji = (Emoji) peopleHoldingHandsObject;
+        assertNotNull(emoji);
+        assertEquals("1F9D1-1F3FC-200D-1F91D-200D-1F9D1-1F3FD", emoji.getUnified());
+    }
+
     // Not all emojis from people & body category can have a skin tone
     @Test
     public void emojiAndToneFromStringTest() {
@@ -86,4 +99,48 @@ public class TextUtilTest {
         assertNotNull(emoji2);
         assertEquals("1F3FC", emoji2.getUnified());
     }
+
+    @Test
+    public void emojiHairFromStringTest() {
+        List<Object> personList = convertToStringAndEmojiObjects("\uD83E\uDDD1\u200D\uD83E\uDDB2");
+        assertFalse(personList.isEmpty());
+        assertEquals(1, personList.size());
+        Object personObject = personList.get(0);
+        assertTrue(personObject instanceof Emoji);
+        Emoji emoji = (Emoji) personObject;
+        assertNotNull(emoji);
+        assertEquals("1F9D1-200D-1F9B2", emoji.getUnified());
+    }
+
+    @Test
+    public void emojiFlagFromStringTest() {
+        List<Object> flagList = convertToStringAndEmojiObjects(
+                "\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC73\uDB40\uDC63\uDB40\uDC74\uDB40\uDC7F");
+        assertFalse(flagList.isEmpty());
+        assertEquals(1, flagList.size());
+        Object flagObject = flagList.get(0);
+        assertTrue(flagObject instanceof Emoji);
+        Emoji emoji = (Emoji) flagObject;
+        assertNotNull(emoji);
+        assertEquals("1F3F4-E0067-E0062-E0073-E0063-E0074-E007F", emoji.getUnified());
+    }
+
+    @Test
+    public void emojiTwoFlagsFromStringTest() {
+        List<Object> flagList = convertToStringAndEmojiObjects(
+                "\uD83C\uDFF4\u200D\u2620\uFE0F\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC73\uDB40\uDC63\uDB40\uDC74\uDB40\uDC7F");
+        assertFalse(flagList.isEmpty());
+        assertEquals(2, flagList.size());
+        Object flag1Object = flagList.get(0);
+        assertTrue(flag1Object instanceof Emoji);
+        Emoji emoji1 = (Emoji) flag1Object;
+        assertNotNull(emoji1);
+        assertEquals("1F3F4-200D-2620-FE0F", emoji1.getUnified());
+        Object flag2Object = flagList.get(1);
+        assertTrue(flag2Object instanceof Emoji);
+        Emoji emoji2 = (Emoji) flag2Object;
+        assertNotNull(emoji2);
+        assertEquals("1F3F4-E0067-E0062-E0073-E0063-E0074-E007F", emoji2.getUnified());
+    }
+
 }
