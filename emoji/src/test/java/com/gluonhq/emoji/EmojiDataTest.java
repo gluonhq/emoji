@@ -44,7 +44,6 @@ import static com.gluonhq.emoji.EmojiData.emojiFromShortName;
 import static com.gluonhq.emoji.EmojiData.emojiFromUnicodeString;
 import static com.gluonhq.emoji.EmojiData.emojiWithTone;
 import static com.gluonhq.emoji.EmojiData.emojiWithoutDefinedTone;
-import static com.gluonhq.emoji.EmojiData.emojiWithoutTone;
 import static com.gluonhq.emoji.EmojiData.getEmojiCollection;
 import static com.gluonhq.emoji.EmojiData.search;
 import static com.gluonhq.emoji.EmojiData.shortNamesSet;
@@ -232,7 +231,7 @@ public class EmojiDataTest {
         assertNotNull(emojiTone);
         assertTrue(emojiTone.getSkinVariationMap().isEmpty());
         assertEquals("1F44B-1F3FC", emojiTone.getUnified());
-        Emoji emoji = emojiWithoutTone(emojiTone, EmojiSkinTone.MEDIUM_LIGHT_SKIN_TONE);
+        Emoji emoji = emojiWithoutDefinedTone(emojiTone);
         assertNotNull(emoji);
         assertEquals("1F44B", emoji.getUnified());
     }
@@ -248,6 +247,20 @@ public class EmojiDataTest {
         Emoji emoji = emojiWithoutDefinedTone(emojiTone);
         assertNotNull(emoji);
         assertEquals("1F44B", emoji.getUnified());
+        assertFalse(emoji.getSkinVariationMap().isEmpty());
+    }
+
+    @Test
+    public void emojiWithoutDefinedDoubleToneTest() {
+        Optional<Emoji> handshakeTone = emojiFromCodepoints("1FAF1-1F3FB-200D-1FAF2-1F3FC");
+        assertFalse(handshakeTone.isEmpty());
+        Emoji emojiTone = assertDoesNotThrow(handshakeTone::get);
+        assertNotNull(emojiTone);
+        assertTrue(emojiTone.getSkinVariationMap().isEmpty());
+        assertEquals("1FAF1-1F3FB-200D-1FAF2-1F3FC", emojiTone.getUnified());
+        Emoji emoji = emojiWithoutDefinedTone(emojiTone);
+        assertNotNull(emoji);
+        assertEquals("1F91D", emoji.getUnified());
         assertFalse(emoji.getSkinVariationMap().isEmpty());
     }
 }

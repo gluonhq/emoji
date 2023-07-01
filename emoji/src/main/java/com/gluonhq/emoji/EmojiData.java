@@ -305,39 +305,10 @@ public class EmojiData {
      * @return an emoji without skin tone
      */
     public static Emoji emojiWithoutDefinedTone(Emoji emoji) {
-        for (EmojiSkinTone tone : EmojiSkinTone.values()) {
-            if (tone != EmojiSkinTone.NO_SKIN_TONE) {
-                Emoji e = emojiWithoutTone(emoji, tone);
-                if (e != null && !e.equals(emoji)) {
-                    return e;
-                }
-            }
+        if (emoji == null) {
+            return null;
         }
-        return emoji;
-    }
-
-    /**
-     * For a given emoji variation with a given skin tone, finds the emoji without skin tone
-     * For instance, for the emoji "1F44B-1F3FC", and tone "1F3FC", returns the emoji "1F44B"
-     *
-     * @param emoji the emoji variation
-     * @param tone the skin tone
-     * @return an emoji without skin tone
-     */
-    public static Emoji emojiWithoutTone(Emoji emoji, EmojiSkinTone tone) {
-        if (emoji != null && tone != EmojiSkinTone.NO_SKIN_TONE) {
-            String skinTone = tone.getUnicode();
-            if (emoji.getUnified().endsWith("-" + skinTone)) {
-                String noTone = emoji.getUnified().substring(0, emoji.getUnified().length() - skinTone.length() - 1);
-                return emojiFromCodepoints(noTone).orElse(emoji);
-            } else if (emoji.getUnified().contains("-" + skinTone + "-")) {
-                String noToneNonQualified = emoji.getUnified().replace("-" + skinTone + "-", "-");
-                return emojiFromCodepoints(noToneNonQualified).orElseGet(() -> {
-                    String noToneQualified = emoji.getUnified().replace("-" + skinTone + "-", "-FE0F-");
-                    return emojiFromCodepoints(noToneQualified).orElse(emoji);
-                });
-            }
-        }
-        return emoji;
+        String shortName = emoji.getShortName().split(":")[0];
+        return EMOJI_MAP.getOrDefault(shortName, emoji);
     }
 }
