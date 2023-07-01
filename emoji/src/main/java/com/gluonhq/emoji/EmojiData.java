@@ -304,7 +304,7 @@ public class EmojiData {
      * @param emoji the emoji variation
      * @return an emoji without skin tone
      */
-    public static Emoji emojiWithoutDefinedTone(Emoji emoji) {
+    public static Emoji emojiWithoutTone(Emoji emoji) {
         if (emoji == null) {
             return null;
         }
