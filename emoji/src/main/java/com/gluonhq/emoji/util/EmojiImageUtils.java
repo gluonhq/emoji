@@ -86,8 +86,8 @@ public class EmojiImageUtils {
 
     public static Rectangle2D getViewportFor64(Emoji emoji) {
         return new Rectangle2D(
-                emoji.getSheet_x() * 66,
-                emoji.getSheet_y() * 66,
+                emoji.getSheetX() * 66,
+                emoji.getSheetY() * 66,
                 66,
                 66
         );
@@ -95,8 +95,8 @@ public class EmojiImageUtils {
 
     public static Rectangle2D getViewportFor32(Emoji emoji) {
         return new Rectangle2D(
-                emoji.getSheet_x() * 34,
-                emoji.getSheet_y() * 34,
+                emoji.getSheetX() * 34,
+                emoji.getSheetY() * 34,
                 34,
                 34
         );
@@ -104,8 +104,8 @@ public class EmojiImageUtils {
 
     public static Rectangle2D getViewportFor20(Emoji emoji) {
         return new Rectangle2D(
-                emoji.getSheet_x() * 22,
-                emoji.getSheet_y() * 22,
+                emoji.getSheetX() * 22,
+                emoji.getSheetY() * 22,
                 22,
                 22
         );
@@ -176,8 +176,8 @@ public class EmojiImageUtils {
                 SoftReference<Image> imageRef = emojiCache.get(emoji);
                 Image image = (imageRef != null) ? imageRef.get() : null;
                 if ((image == null)) {
-                    image = extractGlyph64(emoji.getSheet_x() * 66,
-                            emoji.getSheet_y() * 66,
+                    image = extractGlyph64(emoji.getSheetX() * 66,
+                            emoji.getSheetY() * 66,
                             66,
                             66);
                     imageRef = new SoftReference<>(image);

@@ -58,7 +58,7 @@ public class Demo extends Application {
                 .forEach(node -> {
                     String unified = (String) node.getProperties().get(EmojiImageUtils.IMAGE_VIEW_EMOJI_PROPERTY);
                     EmojiData.emojiFromCodepoints(unified).ifPresent(emoji ->
-                            Tooltip.install(node, new Tooltip("Emoji: " + emoji.getName().orElse("") + "\n" + unified)));
+                            Tooltip.install(node, new Tooltip("Emoji: " + emoji.getName() + "\n" + unified)));
                 });
         // Add nodes to textFlow
         TextFlow textFlow = new TextFlow();
@@ -80,12 +80,12 @@ public class Demo extends Application {
      * @return a text string
      */
     private static String getAllEmojisAsUnicodeString() {
-        return EmojiData.emojiValues().stream()
+        return EmojiData.getEmojiCollection().stream()
                 .sorted((e1, e2) -> {
-                    if (e1.getSheet_y() == e2.getSheet_y()) {
-                        return Integer.compare(e1.getSheet_x(), e2.getSheet_x());
+                    if (e1.getSheetY() == e2.getSheetY()) {
+                        return Integer.compare(e1.getSheetX(), e2.getSheetX());
                     }
-                    return Integer.compare(e1.getSheet_y(), e2.getSheet_y());
+                    return Integer.compare(e1.getSheetY(), e2.getSheetY());
                 })
                 .map(Emoji::character)
                 // optional: add a delimiter like `|` to separate emojis

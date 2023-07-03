@@ -130,7 +130,8 @@ public class TextUtils {
                 if (sbChain.length() > 0) {
                     sbChain.append("-");
                 }
-                sbChain.append(String.format("%04X", ch));
+                String codePoint = String.format("%04X", ch);
+                sbChain.append(codePoint);
 
                 // stop and search emoji if:
                 // current codepoint is an emoji or emoji connector and:
@@ -153,8 +154,17 @@ public class TextUtils {
                         (isVariantSeparator(ch) && !isZWJ(nch) && nch != 0x20E3) ||
                         (ch == 0xE007F) ||
                         (isEmoji(nch) && !isCountryFlag(nch) && !isEmojiConnector(ch))) {
-                    EmojiData.emojiFromCodepoints(sbChain.toString().toUpperCase(Locale.ROOT))
-                            .ifPresent(list::add);
+                    String accumulatedCodePoints = sbChain.toString().toUpperCase(Locale.ROOT);
+                    EmojiData.emojiFromCodepoints(accumulatedCodePoints).ifPresentOrElse(
+                            list::add,
+                            () -> {
+                                if (isSkinTone(ch)) {
+                                    // Not all People&Body emojis support skin variation
+                                    // If this is the case, split sbChain in two and try to add both emojis:
+                                    EmojiData.emojiFromCodepoints(accumulatedCodePoints.substring(0, codePoint.length())).ifPresent(list::add);
+                                    EmojiData.emojiFromCodepoints(codePoint).ifPresent(list::add);
+                                }
+                            });
                     sbChain.setLength(0);
                 }
             } else {
@@ -182,7 +192,7 @@ public class TextUtils {
 
     private static boolean isPersonEmoji(int ch) {
         return "People & Body".equals(EmojiData.emojiFromCodepoints(String.format("%04X", ch))
-                        .flatMap(Emoji::getCategory).orElse(""));
+                        .map(Emoji::getCategory).orElse(""));
     }
 
     private static boolean isEmojiConnector(int ch) {
