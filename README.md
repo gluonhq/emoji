@@ -1,50 +1,53 @@
-Emoji Support
-====
+[![Gluon](.github/assets/gluon_logo.svg)](https://gluonhq.com)
+
+[![Build](https://github.com/gluonhq/emoji/actions/workflows/build.yml/badge.svg)](https://github.com/gluonhq/emoji/actions/workflows/build.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/com.gluonhq/emoji)](https://search.maven.org/#search|ga|1|com.gluonhq.emoji)
+[![License](https://img.shields.io/github/license/gluonhq/emoji)](https://opensource.org/licenses/GPL-3.0)
 
 The GluonFX Emoji component provides Emoji support to JavaFX applications.
 
-Emoji
----------
+## Projects
+
+### Emoji
 Raw emoji support, no JavaFX control
 
-Emoji-Samples
----------
+### Emoji-Samples
 Simple JavaFX application that displays all emojis
 
-Emoji-Updater
----------
+### Emoji-Updater
 Utility to manually update Emoji to the latest emoji data, whenever a new version is released
 
-Build
-=====
+## Build
 
-To update the emoji list:
-
-```
-cd emoji-updater
-mvn javafx:run
-cd ..
-```
-
-To build the Emoji artifact:
+Build the emoji artifact:
 
 ```
-cd emoji
-mvn clean install
-cd ..
+mvn clean install -f emoji
 ```
 
-To run the sample application:
-
+Use the emoji dependency in a Maven project:
 
 ```
-cd samples
-mvn javafx:run
-cd ..
+<dependency>
+    <groupId>com.gluonhq</groupId>
+    <artifactId>emoji</artifactId>
+    <version>${version}</version>
+</dependency>
 ```
 
-Contribution
-=====
+Run the sample application:
+
+```
+mvn javafx:run -f samples
+```
+
+Update the emoji list:
+
+```
+mvn javafx:run -f emoji-updater
+```
+
+## Contribution
 
 All contributions are welcome!
 
