@@ -15,8 +15,8 @@ From [Wikipedia](https://en.wikipedia.org/wiki/Emoji):
 
 ## Emoji support in JavaFX
 
-JavaFX can be used to create client application that target desktop, mobiles and even web.
-Given the wide variety of application, it becomes very important to have emoji support in the platform.
+JavaFX can be used to create client applications that target desktop, mobiles and even web.
+Given the wide variety of applications, it becomes very important to have emoji support in the platform.
 This project aims to bridge this gap and add emoji support to JavaFX.
 
 ## Usage
@@ -24,9 +24,10 @@ This project aims to bridge this gap and add emoji support to JavaFX.
 As stated earlier, emojis can be represented in form of text or a picture.
 This library can be used to represent an Emoji as one of the following and seamlessly interchange between these types:
 
-* String
-* Unicode
-* Image
+* String, e.g. `wave`
+* Unicode, e.g. `\uD83D\uDC4B`
+* Hex code string, e.g. `1F44B-1F3FC`
+* Image, e.g. `👋`
 
 [Emoji](https://github.com/gluonhq/emoji/blob/main/emoji/src/main/java/com/gluonhq/emoji/Emoji.java) data class is used to represent each emoji.
 For better understanding of the Emoji class, we suggest you to go through [Using the data](https://github.com/iamcal/emoji-data#using-the-data) in emoji-data or the Emoji javadoc.
@@ -38,22 +39,22 @@ For better understanding of the Emoji class, we suggest you to go through [Using
 Fetch `👋` emoji from text:
 
 ```
-Optional<Emoji> emoji = emojiFromShortName("wave");
+Optional<Emoji> emoji = EmojiData.emojiFromShortName("wave");
 ```
 
 In case the exact text for emoji is not known, `search` API can be used to get a list of emojis which matches the text:
 
 ```
-List<Emoji> emojis = search("wav");
+List<Emoji> emojis = EmojiData.search("wav");
 ```
 
-Fetch `👋` emoji from unicode, e.g. `\uD83D\uDC4B`:
+Fetch `👋` emoji from unicode:
 
 ```
 Optional<Emoji> emoji = EmojiData.emojiFromUnicodeString("\uD83D\uDC4B");
 ```
 
-Fetch `👋` emoji from hex-code point string, e.g. `1F44B-1F3FC`:
+Fetch `👋` emoji from hex-code point string:
 
 ```
 Optional<Emoji> emoji = EmojiData.emojiFromCodepoints("1F44B-1F3FC");
@@ -62,12 +63,12 @@ Optional<Emoji> emoji = EmojiData.emojiFromCodepoints("1F44B-1F3FC");
 Fetch `👋` emoji's unicode from text:
 
 ```
-Optional<String> unicode = emojiForText("wave");
+Optional<String> unicode = EmojiData.emojiForText("wave");
 ```
 
-## Modules
+## Projects
 
-The GitHub repository contains 3 modules: emoji, samples, emoji-updater. 
+The GitHub repository contains 3 projects: emoji, samples, emoji-updater. 
 
 ### emoji
 Raw emoji support with `Emoji` and `EmojiData` classes.
@@ -88,7 +89,6 @@ Manually build the emoji artifact:
 ```
 mvn clean install -f emoji
 ```
-
 
 ### samples
 Simple JavaFX application that displays all emojis.
