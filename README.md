@@ -35,7 +35,7 @@ For better understanding of the Emoji class, we suggest you to go through [Using
 
 `EmojiData` contains the public API which can be used to create `Emoji` objects from String and Unicode, and vice-versa.
 
-Fetch `Wave` emoji from text, e.g. `wave`:
+Fetch `👋` emoji from text:
 
 ```
 Optional<Emoji> emoji = emojiFromShortName("wave");
@@ -47,19 +47,19 @@ In case the exact text for emoji is not known, `search` API can be used to get a
 List<Emoji> emojis = search("wav");
 ```
 
-Fetch Wave emoji from unicode, e.g. `\uD83D\uDC4B`:
+Fetch `👋` emoji from unicode, e.g. `\uD83D\uDC4B`:
 
 ```
 Optional<Emoji> emoji = EmojiData.emojiFromUnicodeString("\uD83D\uDC4B");
 ```
 
-Fetch Wave emoji from hex-code point string, e.g. `1F44B-1F3FC`:
+Fetch `👋` emoji from hex-code point string, e.g. `1F44B-1F3FC`:
 
 ```
 Optional<Emoji> emoji = EmojiData.emojiFromCodepoints("1F44B-1F3FC");
 ```
 
-Fetch unicode of an Emoji from text,  e.g. `wave`:
+Fetch `👋` emoji's unicode from text:
 
 ```
 Optional<String> unicode = emojiForText("wave");
@@ -71,13 +71,7 @@ The GitHub repository contains 3 modules: emoji, samples, emoji-updater.
 
 ### emoji
 Raw emoji support with `Emoji` and `EmojiData` classes.
-This module is to be as a dependency in your JavaFX application.
-
-Build the emoji artifact:
-
-```
-mvn clean install -f emoji
-```
+This module is to be used  as a dependency in your JavaFX application.
 
 Use the emoji dependency in a Maven project:
 
@@ -89,9 +83,22 @@ Use the emoji dependency in a Maven project:
 </dependency>
 ```
 
+Manually build the emoji artifact:
+
+```
+mvn clean install -f emoji
+```
+
+
 ### samples
 Simple JavaFX application that displays all emojis.
 This application can be considered as a playground to test emoji and its APIs.
+
+![emoji-sample.png](.github/assets/emoji-sample.png)
+
+Each emoji is an ImageView and shows the description of the emoji on hover:
+
+![emoji-sample-hover.png](.github/assets/emoji-sample-hover.png)
 
 Run the sample application:
 
