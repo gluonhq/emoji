@@ -4,20 +4,74 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.gluonhq/emoji)](https://search.maven.org/#search|ga|1|com.gluonhq.emoji)
 [![License](https://img.shields.io/github/license/gluonhq/emoji)](https://opensource.org/licenses/GPL-3.0)
 
-The GluonFX Emoji component provides Emoji support to JavaFX applications.
+Emoji library is a Java implementation of the [emoji-data](https://github.com/iamcal/emoji-data) project adding emoji support for JavaFX applications.
 
-## Projects
+## What is an Emoji?
 
-### Emoji
-Raw emoji support, no JavaFX control
+From [Wikipedia](https://en.wikipedia.org/wiki/Emoji):
 
-### Emoji-Samples
-Simple JavaFX application that displays all emojis
+> An emoji is a pictogram, logogram, ideogram or smiley embedded in text and used in electronic messages and web pages.
+> The primary function of emoji is to fill in emotional cues otherwise missing from typed conversation.
 
-### Emoji-Updater
-Utility to manually update Emoji to the latest emoji data, whenever a new version is released
+## Emoji support in JavaFX
 
-## Build
+JavaFX can be used to create client application that target desktop, mobiles and even web.
+Given the wide variety of application, it becomes very important to have emoji support in the platform.
+This project aims to bridge this gap and add emoji support to JavaFX.
+
+## Usage
+
+As stated earlier, emojis can be represented in form of text or a picture.
+This library can be used to represent an Emoji as one of the following and seamlessly interchange between these types:
+
+* String
+* Unicode
+* Image
+
+[Emoji](https://github.com/gluonhq/emoji/blob/main/emoji/src/main/java/com/gluonhq/emoji/Emoji.java) data class is used to represent each emoji.
+For better understanding of the Emoji class, we suggest you to go through [Using the data](https://github.com/iamcal/emoji-data#using-the-data) in emoji-data or the Emoji javadoc.
+
+### API overview
+
+`EmojiData` contains the public API which can be used to create `Emoji` objects from String and Unicode, and vice-versa.
+
+Fetch `Wave` emoji from text, e.g. `wave`:
+
+```
+Optional<Emoji> emoji = emojiFromShortName("wave");
+```
+
+In case the exact text for emoji is not known, `search` API can be used to get a list of emojis which matches the text:
+
+```
+List<Emoji> emojis = search("wav");
+```
+
+Fetch Wave emoji from unicode, e.g. `\uD83D\uDC4B`:
+
+```
+Optional<Emoji> emoji = EmojiData.emojiFromUnicodeString("\uD83D\uDC4B");
+```
+
+Fetch Wave emoji from hex-code point string, e.g. `1F44B-1F3FC`:
+
+```
+Optional<Emoji> emoji = EmojiData.emojiFromCodepoints("1F44B-1F3FC");
+```
+
+Fetch unicode of an Emoji from text,  e.g. `wave`:
+
+```
+Optional<String> unicode = emojiForText("wave");
+```
+
+## Modules
+
+The GitHub repository contains 3 modules: emoji, samples, emoji-updater. 
+
+### emoji
+Raw emoji support with `Emoji` and `EmojiData` classes.
+This module is to be as a dependency in your JavaFX application.
 
 Build the emoji artifact:
 
@@ -35,11 +89,19 @@ Use the emoji dependency in a Maven project:
 </dependency>
 ```
 
+### samples
+Simple JavaFX application that displays all emojis.
+This application can be considered as a playground to test emoji and its APIs.
+
 Run the sample application:
 
 ```
 mvn javafx:run -f samples
 ```
+
+### emoji-updater
+Utility to manually update Emoji to the latest emoji data, whenever a new version is released.
+Normally, this will be used by the library developers, but in case we are falling behind, you can use it too ;)
 
 Update the emoji list:
 
