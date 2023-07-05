@@ -15,7 +15,7 @@ From [Wikipedia](https://en.wikipedia.org/wiki/Emoji):
 
 ## Emoji support in JavaFX
 
-JavaFX can be used to create client applications that target desktop, mobiles and even web.
+JavaFX can be used to create client and embedded applications that target desktop, mobiles and even web.
 Given the wide variety of applications, it becomes very important to have emoji support in the platform.
 This project aims to bridge this gap and add emoji support to JavaFX.
 
@@ -110,7 +110,8 @@ mvn javafx:run -f samples
 Utility to manually update Emoji to the latest emoji data, whenever a new version is released.
 Normally, this will be used by the library developers, but in case we are falling behind, you can use it too ;)
 
-Update the emoji list:
+To update the emoji list, set the [commit number](https://github.com/gluonhq/emoji/blob/main/emoji-updater/src/main/java/com/gluonhq/emoji/tools/Main.java#L39)
+from [emoji-data](https://github.com/iamcal/emoji-data) and run:
 
 ```
 mvn javafx:run -f emoji-updater
