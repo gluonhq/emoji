@@ -31,7 +31,7 @@ This library can be used to represent an Emoji as one of the following and seaml
 * Image, e.g. `👋`
 
 [Emoji](https://github.com/gluonhq/emoji/blob/main/emoji/src/main/java/com/gluonhq/emoji/Emoji.java) data class is used to represent each emoji.
-For better understanding of the Emoji class, we suggest you to go through [Using the data](https://github.com/iamcal/emoji-data#using-the-data) in emoji-data or the Emoji javadoc.
+For better understanding of the Emoji class, we suggest you to go through [Using the data](https://github.com/iamcal/emoji-data#using-the-data) in emoji-data or the Emoji [javadoc](https://javadoc.io/doc/com.gluonhq/emoji).
 
 ### API overview
 
