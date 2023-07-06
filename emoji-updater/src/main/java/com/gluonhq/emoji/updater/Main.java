@@ -1,4 +1,4 @@
-package com.gluonhq.emoji.tools;
+package com.gluonhq.emoji.updater;
 
 import com.gluonhq.connect.converter.InputStreamIterableInputConverter;
 import com.gluonhq.connect.provider.InputStreamListDataReader;
@@ -21,21 +21,24 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
  * Run this class to get the latest emoji data from https://github.com/iamcal/emoji-data/
  *
- * It grabs the emoji.json and the related spritesheet images, and add them to the emoji module,
+ * It grabs the emoji.json and the related sprite sheet images, and add them to the emoji module,
  * converting the json format into a csv file that can be read without third party dependencies.
  *
- * Current version: Emoji version 15.0 (September 2022)
+ * Current Emoji version: 15.0 (September 2022)
+ * Current emoji-data tag: 15.0.1 (May 2023)
  */
 public class Main {
 
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
+    /**
+     * Update this commit number from https://github.com/iamcal/emoji-data/tags before running a new update
+     */
     private static final String COMMIT_NUMBER = "063f328d7951cb2e2a6678b06dcbdf8dd599fad7"; // tag 15.0.1
     private static final String EMOJI_JSON_URL = "https://raw.githubusercontent.com/iamcal/emoji-data/" + COMMIT_NUMBER + "/emoji.json";
     private static final String EMOJI_20_PNG_URL = "https://github.com/iamcal/emoji-data/blob/" + COMMIT_NUMBER + "/sheets-clean/sheet_apple_20_clean.png?raw=true";
