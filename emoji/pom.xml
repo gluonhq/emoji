@@ -13,7 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
-        <javafxVersion>20</javafxVersion>
+        <javafx.version>20</javafx.version>
         <javadoc.plugin.version>3.1.0</javadoc.plugin.version>
         <gpg.plugin.version>1.6</gpg.plugin.version>
     </properties>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>${javafxVersion}</version>
+            <version>${javafx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
