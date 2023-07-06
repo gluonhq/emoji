@@ -39,11 +39,10 @@ jobs:
           NEW_PROJECT_VERSION=${TAG%.*}.$((${TAG##*.} + 1))
           echo "Update development version to $NEW_PROJECT_VERSION"
           mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f emoji
-          mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f emoji-updater
-          mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f samples
+          mvn versions:set-property -Dproperty=emoji.version -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -f samples
           git config --global user.name 'Gluon Bot'
           git config --global user.email 'gluon-bot@users.noreply.github.com'
-          git commit emoji/pom.xml emoji-updater/pom.xml samples/pom.xml -m "Prepare development of $NEW_PROJECT_VERSION"
+          git commit emoji/pom.xml samples/pom.xml -m "Prepare development of $NEW_PROJECT_VERSION"
           git push https://gluon-bot:$PAT@github.com/$GITHUB_REPOSITORY HEAD:main
         shell: bash
         env:
