@@ -32,6 +32,11 @@ jobs:
           MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+
       - name: Commit next development version
         if: steps.deploy.outputs.exit_code == 0
         run: |
