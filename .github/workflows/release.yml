@@ -13,7 +13,6 @@ jobs:
         with:
           fetch-depth: 5
 
-
       - name: Setup Java and Apache Maven
         uses: actions/setup-java@v3
         with:
