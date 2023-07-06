@@ -3,6 +3,7 @@
 [![Build](https://github.com/gluonhq/emoji/actions/workflows/build.yml/badge.svg)](https://github.com/gluonhq/emoji/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/com.gluonhq/emoji)](https://search.maven.org/#search|ga|1|com.gluonhq.emoji)
 [![License](https://img.shields.io/github/license/gluonhq/emoji)](https://opensource.org/licenses/GPL-3.0)
+[![javadoc](https://javadoc.io/badge2/com.gluonhq/emoji/javadoc.svg?color=blue)](https://javadoc.io/doc/com.gluonhq/emoji)
 
 Emoji library is a Java implementation of the [emoji-data](https://github.com/iamcal/emoji-data) project adding emoji support for JavaFX applications.
 
@@ -15,7 +16,7 @@ From [Wikipedia](https://en.wikipedia.org/wiki/Emoji):
 
 ## Emoji support in JavaFX
 
-JavaFX can be used to create client and embedded applications that target desktop, mobiles and even web.
+JavaFX can be used to create client applications that target desktop, embedded, mobiles and even web.
 Given the wide variety of applications, it becomes very important to have emoji support in the platform.
 This project aims to bridge this gap and add emoji support to JavaFX.
 
@@ -64,6 +65,12 @@ Fetch `👋` emoji's unicode from text:
 
 ```
 Optional<String> unicode = EmojiData.emojiForText("wave");
+```
+
+UTF-8 encoded text can be parsed into a list of emojis and regular text using `TextUtil`:
+
+```
+List<Object> nodes = TextUtil.convertToStringAndEmojiObjects("this is an emoji: \uD83D\uDC4B");
 ```
 
 ## Projects
