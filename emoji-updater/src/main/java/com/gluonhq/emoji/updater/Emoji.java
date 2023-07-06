@@ -1,4 +1,4 @@
-package com.gluonhq.emoji.tools;
+package com.gluonhq.emoji.updater;
 
 import java.util.List;
 
