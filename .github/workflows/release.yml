@@ -25,13 +25,17 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Publish Release
-        run: mvn -B -ntp clean deploy -f emoji -Prelease
+        id: deploy
+        run: |
+          mvn -B -ntp clean deploy -f emoji -Prelease
+          echo ::set-output name=exit_code::$?
         env:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Create GitHub release
+        if: steps.deploy.outputs.exit_code == 0
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
