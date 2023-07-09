@@ -1,17 +1,25 @@
 name: Release
 on:
-  push:
-    tags:
-      - '*'
+  workflow_dispatch:
+    inputs:
+      nextVersion:
+        description: 'Next development version without "SNAPSHOT". If not provided, the next version will be calculated from the pom'
+        required: false
+        type: string
 
 jobs:
-  build:
+  pre-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 5
+
+      - name: Configure GIT
+        run: |
+          git config --global user.name 'Gluon Bot'
+          git config --global user.email 'gluon-bot@users.noreply.github.com'
 
       - name: Setup Java and Apache Maven
         uses: actions/setup-java@v3
@@ -23,6 +31,21 @@ jobs:
           server-password: MAVEN_CENTRAL_TOKEN
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Update to release version
+        run: |
+          mvn -B versions:set -DremoveSnapshot -DgenerateBackupPoms=false -f emoji
+          PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f emoji)
+          mvn versions:set-property -Dproperty=emoji.version -DnewVersion=$PROJECT_VERSION -f samples
+          git commit emoji/pom.xml samples/pom.xml -m "Release v$PROJECT_VERSION"
+          git push https://gluon-bot:$PAT@github.com/$GITHUB_REPOSITORY HEAD:main
+        env:
+          PAT: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
       - name: Publish Release
         id: deploy
@@ -40,18 +63,29 @@ jobs:
         with:
           generate_release_notes: true
 
-      - name: Commit next development version
-        if: steps.deploy.outputs.exit_code == 0
-        run: |
+  post-release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+         fetch-depth: 5
+
+    - name: Commit next development version
+      if: steps.deploy.outputs.exit_code == 0
+      run: |
+        NEW_PROJECT_VERSION=$NEXT_VERSION
+        if [ -z "$NEW_PROJECT_VERSION" ]
+        then
           TAG=${GITHUB_REF/refs\/tags\//}
           NEW_PROJECT_VERSION=${TAG%.*}.$((${TAG##*.} + 1))
-          echo "Update development version to $NEW_PROJECT_VERSION"
-          mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f emoji
-          mvn versions:set-property -Dproperty=emoji.version -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -f samples
-          git config --global user.name 'Gluon Bot'
-          git config --global user.email 'gluon-bot@users.noreply.github.com'
-          git commit emoji/pom.xml samples/pom.xml -m "Prepare development of $NEW_PROJECT_VERSION"
-          git push https://gluon-bot:$PAT@github.com/$GITHUB_REPOSITORY HEAD:main
-        shell: bash
-        env:
-          PAT: ${{ secrets.GITHUB_TOKEN }}
+        fi
+        echo "Update development version to $NEW_PROJECT_VERSION"
+        mvn versions:set -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -DgenerateBackupPoms=false -f emoji
+        mvn versions:set-property -Dproperty=emoji.version -DnewVersion=$NEW_PROJECT_VERSION-SNAPSHOT -f samples
+        git commit emoji/pom.xml samples/pom.xml -m "Prepare development of $NEW_PROJECT_VERSION"
+        git push https://gluon-bot:$PAT@github.com/$GITHUB_REPOSITORY HEAD:main
+      shell: bash
+      env:
+        PAT: ${{ secrets.GITHUB_TOKEN }}
+        NEXT_VERSION: ${{ inputs.nextVersion }}
