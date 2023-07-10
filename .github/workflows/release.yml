@@ -26,7 +26,7 @@ jobs:
       - name: Setup Java and Apache Maven
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
+          distribution: 'oracle'
           java-version: '17'
           server-id: ossrh
           server-username: MAVEN_USERNAME
