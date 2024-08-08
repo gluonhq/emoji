@@ -196,24 +196,4 @@ public class EmojiImageUtils {
         emojiView.setFitHeight(size);
         return emojiView;
     }
-
-    /*public static Image getImage20(Emoji emoji) {
-        return emojiMap20.computeIfAbsent(emoji.getShort_name().orElse(""), s -> {
-            final PixelReader pixelReader = emojiSprite20.getPixelReader();
-            // each image has a padding of 1px
-            final int x = emoji.getSheet_x() * 22;
-            final int y = emoji.getSheet_y() * 22;
-            return new WritableImage(pixelReader, x, y, 20, 20);
-        });
-    }
-    
-    public static Image getImage32(Emoji emoji) {
-        return emojiMap32.computeIfAbsent(emoji.getShort_name().orElse(""), s -> {
-            final PixelReader pixelReader = emojiSprite32.getPixelReader();
-            // each image has a padding of 1px
-            final int x = emoji.getSheet_x() * 34;
-            final int y = emoji.getSheet_y() * 34;
-            return new WritableImage(pixelReader, x, y, 32, 32);
-        });
-    }*/
 }
