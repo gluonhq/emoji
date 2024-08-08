@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.gluonhq</groupId>
             <artifactId>emoji</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

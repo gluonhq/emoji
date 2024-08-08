@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.gluonhq.emoji.EmojiLoaderFactory;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -52,25 +54,16 @@ public class EmojiImageUtils {
 
     public static final String IMAGE_VIEW_EMOJI_PROPERTY = "emoji_unified";
 
-    // private static final Map<String, Image> emojiMap20;
-    // private static final Map<String, Image> emojiMap32;
-    /*static {
-        emojiSprite20 = new Image(EmojiImageUtils.class.getResourceAsStream("/org/signal/sheet_apple_20.png"));
-        emojiSprite32 = new Image(EmojiImageUtils.class.getResourceAsStream("/org/signal/sheet_apple_32.png"));
-        emojiMap20 = new HashMap<>();
-        emojiMap32 = new HashMap<>();
-    }*/
-
     public static Image getImage20() {
         if (emojiSprite20 == null) {
-            emojiSprite20 = new Image(EmojiImageUtils.class.getResourceAsStream("sheet_apple_20.png"));
+            emojiSprite20 = EmojiLoaderFactory.getEmojiImageLoader().loadEmojiSprite(20);
         }
         return emojiSprite20;
     }
 
     public static Image getImage32() {
         if (emojiSprite32 == null) {
-            emojiSprite32 = new Image(EmojiImageUtils.class.getResourceAsStream("sheet_apple_32.png"));
+            emojiSprite32 = EmojiLoaderFactory.getEmojiImageLoader().loadEmojiSprite(32);
         }
         return emojiSprite32;
     }
@@ -78,7 +71,7 @@ public class EmojiImageUtils {
     public static Image getImage64() {
         Image image64 = emojiSprite64 == null ? null : emojiSprite64.get();
         if (image64 == null) {
-            image64 = new Image(EmojiImageUtils.class.getResourceAsStream("sheet_apple_64.png"));
+            image64 = EmojiLoaderFactory.getEmojiImageLoader().loadEmojiSprite(64);
             emojiSprite64 = new SoftReference<>(image64);
         }
         return image64;
