@@ -15,20 +15,57 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.CompletableFuture;
 
 public class DownloadbleEmojiSpriteLoader implements EmojiSpriteLoader {
 
     private static final String COMMIT_NUMBER = "063f328d7951cb2e2a6678b06dcbdf8dd599fad7"; // tag 15.0.1
     private static final String EMOJI_PNG_URL = "https://github.com/iamcal/emoji-data/blob/" + COMMIT_NUMBER + "/sheets-clean/sheet_apple_%s_clean.png?raw=true";
-    public Image loadEmojiSprite(int size) {
-        String fileName = "sheet_apple_" + size + ".png";
-        Path localPath = Paths.get(System.getProperty("user.home"), ".gluon", "emoji", COMMIT_NUMBER, fileName);
-        try {
-            if (!Files.exists(localPath)) {
-                downloadFile(new URI(String.format(EMOJI_PNG_URL, size)).toURL(), localPath);
+
+    private static final String LOCAL_PATH = System.getProperty("user.home") + "/.gluon/emoji/" + COMMIT_NUMBER;
+    private boolean initialized;
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    @Override
+    public CompletableFuture<Boolean> initialize() {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                downloadSprites(20, 32, 64);
+                initialized = true;
+                return true;
+            } catch (Exception e) {
+                return false;
             }
+        });
+    }
+
+    private void downloadSprites(int... sizes) {
+        for (int size : sizes) {
+            String fileName = "sheet_apple_" + size + ".png";
+            Path localPath = Paths.get(LOCAL_PATH, fileName);
+            try {
+                if (!Files.exists(localPath)) {
+                    downloadFile(new URI(String.format(EMOJI_PNG_URL, size)).toURL(), localPath);
+                }
+            } catch (IOException | URISyntaxException e) {
+                throw new RuntimeException("Unable to load local image file", e);
+            }
+        }
+    }
+
+    public Image loadEmojiSprite(int size) {
+        if (!initialized) {
+            throw new RuntimeException("Sprite Loader hasn't been initialized or completed initialization");
+        }
+        String fileName = "sheet_apple_" + size + ".png";
+        Path localPath = Paths.get(LOCAL_PATH, fileName);
+        try {
             return new Image(new FileInputStream(localPath.toFile()));
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Unable to load local image file", e);
         }
     }

@@ -29,9 +29,12 @@ package com.gluonhq.emoji.samples;
 
 import com.gluonhq.emoji.Emoji;
 import com.gluonhq.emoji.EmojiData;
+import com.gluonhq.emoji.EmojiLoaderFactory;
+import com.gluonhq.emoji.EmojiSpriteLoader;
 import com.gluonhq.emoji.util.EmojiImageUtils;
 import com.gluonhq.emoji.util.TextUtils;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -41,6 +44,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Demo extends Application {
@@ -48,21 +52,7 @@ public class Demo extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // Get a single text string with all unicode characters for all emojis
-        String text = getAllEmojisAsUnicodeString();
-
-        // Convert text to Text (if delimiter is not empty) and Image nodes (all emojis)
-        List<Node> emojiNodes = TextUtils.convertToTextAndImageNodes(text);
-        emojiNodes.stream()
-                .filter(ImageView.class::isInstance)
-                .forEach(node -> {
-                    String unified = (String) node.getProperties().get(EmojiImageUtils.IMAGE_VIEW_EMOJI_PROPERTY);
-                    EmojiData.emojiFromCodepoints(unified).ifPresent(emoji ->
-                            Tooltip.install(node, new Tooltip("Emoji: " + emoji.getName() + "\n" + unified)));
-                });
-        // Add nodes to textFlow
         TextFlow textFlow = new TextFlow();
-        textFlow.getChildren().addAll(emojiNodes);
         ScrollPane pane = new ScrollPane(textFlow);
         Scene scene = new Scene(pane, 1230, 800);
         textFlow.prefWidthProperty().bind(scene.widthProperty().subtract(30));
@@ -70,6 +60,24 @@ public class Demo extends Application {
         primaryStage.setTitle("Emoji nodes: " +
                 textFlow.getChildren().stream().filter(ImageView.class::isInstance).count());
         primaryStage.show();
+
+        EmojiLoaderFactory.getEmojiImageLoader().initialize().thenAccept(aBoolean -> {
+            if (aBoolean) {
+                // Get a single text string with all unicode characters for all emojis
+                String text = getAllEmojisAsUnicodeString();
+                // Convert text to Text (if delimiter is not empty) and Image nodes (all emojis)
+                List<Node> emojiNodes = TextUtils.convertToTextAndImageNodes(text);
+                emojiNodes.stream()
+                        .filter(ImageView.class::isInstance)
+                        .forEach(node -> {
+                            String unified = (String) node.getProperties().get(EmojiImageUtils.IMAGE_VIEW_EMOJI_PROPERTY);
+                            EmojiData.emojiFromCodepoints(unified).ifPresent(emoji ->
+                                    Tooltip.install(node, new Tooltip("Emoji: " + emoji.getName() + "\n" + unified)));
+                        });
+                // Add nodes to textFlow
+                Platform.runLater(() -> textFlow.getChildren().addAll(emojiNodes));
+            }
+        });
     }
 
     /**

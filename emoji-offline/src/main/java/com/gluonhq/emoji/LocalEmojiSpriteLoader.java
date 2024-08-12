@@ -3,8 +3,20 @@ package com.gluonhq.emoji;
 import javafx.scene.image.Image;
 
 import java.io.InputStream;
+import java.util.concurrent.CompletableFuture;
 
 public class LocalEmojiSpriteLoader implements EmojiSpriteLoader {
+
+    @Override
+    public boolean isInitialized() {
+        return true;
+    }
+
+    @Override
+    public CompletableFuture<Boolean> initialize() {
+        return CompletableFuture.completedFuture(true);
+    }
+
     @Override
     public Image loadEmojiSprite(int size) {
         switch (size) {

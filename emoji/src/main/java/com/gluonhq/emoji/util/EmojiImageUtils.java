@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.gluonhq.emoji.EmojiLoaderFactory;
+import com.gluonhq.emoji.EmojiSpriteLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -56,14 +57,24 @@ public class EmojiImageUtils {
 
     public static Image getImage20() {
         if (emojiSprite20 == null) {
-            emojiSprite20 = EmojiLoaderFactory.getEmojiImageLoader().loadEmojiSprite(20);
+            EmojiSpriteLoader emojiImageLoader = EmojiLoaderFactory.getEmojiImageLoader();
+            if (emojiImageLoader.isInitialized()) {
+                emojiSprite20 = emojiImageLoader.loadEmojiSprite(20);
+            } else {
+                throw new RuntimeException("EmojiSpriteLoader not initialized");
+            }
         }
         return emojiSprite20;
     }
 
     public static Image getImage32() {
         if (emojiSprite32 == null) {
-            emojiSprite32 = EmojiLoaderFactory.getEmojiImageLoader().loadEmojiSprite(32);
+            EmojiSpriteLoader emojiImageLoader = EmojiLoaderFactory.getEmojiImageLoader();
+            if (emojiImageLoader.isInitialized()) {
+                emojiSprite32 = emojiImageLoader.loadEmojiSprite(32);
+            } else {
+                throw new RuntimeException("EmojiSpriteLoader not initialized");
+            }
         }
         return emojiSprite32;
     }
@@ -71,7 +82,12 @@ public class EmojiImageUtils {
     public static Image getImage64() {
         Image image64 = emojiSprite64 == null ? null : emojiSprite64.get();
         if (image64 == null) {
-            image64 = EmojiLoaderFactory.getEmojiImageLoader().loadEmojiSprite(64);
+            EmojiSpriteLoader emojiImageLoader = EmojiLoaderFactory.getEmojiImageLoader();
+            if (emojiImageLoader.isInitialized()) {
+                image64 = emojiImageLoader.loadEmojiSprite(64);
+            } else {
+                throw new RuntimeException("EmojiSpriteLoader not initialized");
+            }
             emojiSprite64 = new SoftReference<>(image64);
         }
         return image64;

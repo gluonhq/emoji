@@ -2,8 +2,11 @@ package com.gluonhq.sample;
 
 import com.gluonhq.emoji.Emoji;
 import com.gluonhq.emoji.EmojiData;
+import com.gluonhq.emoji.EmojiLoaderFactory;
+import com.gluonhq.emoji.EmojiSpriteLoader;
 import com.gluonhq.emoji.util.TextUtils;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -38,9 +41,11 @@ public class Main extends Application {
 
         textArea.textProperty().addListener((o, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-                String unicodeText = createUnicodeText(newValue);
-                List<Node> nodes = TextUtils.convertToTextAndImageNodes(unicodeText);
-                hBox.getChildren().setAll(nodes);
+                EmojiLoaderFactory.getEmojiImageLoader().initialize().thenAccept(aBoolean -> {
+                    String unicodeText = createUnicodeText(newValue);
+                    List<Node> nodes = TextUtils.convertToTextAndImageNodes(unicodeText);
+                    Platform.runLater(() -> hBox.getChildren().setAll(nodes));
+                });
             }
         });
         return new VBox(20, textArea, hBox);

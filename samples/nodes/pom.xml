@@ -55,6 +55,9 @@
                         <!-- Configuration for debugging -->
                         <id>debug</id>
                         <configuration>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:8000</option>
+                            </options>
                             <mainClass>${main.class}</mainClass>
                         </configuration>
                     </execution>
