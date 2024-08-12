@@ -1,6 +1,10 @@
 package com.gluonhq.emoji;
 
+import java.util.logging.Logger;
+
 public class EmojiLoaderFactory {
+
+    private static final Logger LOG = Logger.getLogger(EmojiLoaderFactory.class.getName());
 
     private static final String OFFLINE_LOADER_CLASS = "com.gluonhq.emoji.LocalEmojiSpriteLoader";
     private static final String ONLINE_LOADER_CLASS = "com.gluonhq.emoji.DownloadbleEmojiSpriteLoader";
@@ -9,10 +13,10 @@ public class EmojiLoaderFactory {
     public static EmojiSpriteLoader getEmojiImageLoader() {
         if (emojiSpriteLoader == null) {
             if (isClassAvailable(OFFLINE_LOADER_CLASS)) {
-                System.out.println("Loading offline....");
+                LOG.info("Loading " + OFFLINE_LOADER_CLASS);
                 emojiSpriteLoader = createInstance(OFFLINE_LOADER_CLASS);
             } else {
-                System.out.println("Loading online....");
+                LOG.info("Loading " + ONLINE_LOADER_CLASS);
                 emojiSpriteLoader = createInstance(ONLINE_LOADER_CLASS);
             }
         }

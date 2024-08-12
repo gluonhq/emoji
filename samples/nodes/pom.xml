@@ -23,7 +23,7 @@
             <version>${javafx.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.gluonhq</groupId>
+            <groupId>com.gluonhq.emoji</groupId>
             <artifactId>emoji</artifactId>
             <version>${emoji.version}</version>
         </dependency>

@@ -24,16 +24,16 @@ jobs:
           server-password: MAVEN_CENTRAL_TOKEN
 
       - name: Build Project
-        run: mvn -B -ntp clean verify -f emoji
+        run: mvn -B -ntp clean verify
 
       - name: Publish Snapshots
         if: github.ref == 'refs/heads/main'
         run: |
           # Find version
-          ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f emoji)
+          ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           if [[ $ver == *"SNAPSHOT"* ]]
           then
-              mvn -B -ntp clean deploy -f emoji
+              mvn -B -ntp clean deploy -pl '!updater'
           fi
         shell: bash
         env:

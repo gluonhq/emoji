@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>emoji</artifactId>
-    <name>Emoji core</name>
-    <description>Emoji support for JavaFX</description>
+    <artifactId>offline</artifactId>
+    <name>Offline support for Emoji</name>
+    <description>Offline Emoji support for JavaFX</description>
 
     <parent>
         <groupId>com.gluonhq.emoji</groupId>
@@ -11,24 +11,21 @@
         <version>1.0.2-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <emoji.version>1.0.2-SNAPSHOT</emoji.version>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>com.gluonhq.emoji</groupId>
+            <artifactId>emoji</artifactId>
+            <version>${emoji.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.2</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
