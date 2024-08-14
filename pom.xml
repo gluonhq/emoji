@@ -14,6 +14,8 @@
         <module>emoji</module>
         <module>offline</module>
         <module>updater</module>
+        <module>samples/introduction</module>
+        <module>samples/nodes</module>
     </modules>
 
     <properties>

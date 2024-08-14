@@ -5,7 +5,14 @@
     <artifactId>samples</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>samples</name>
+    <name>Emoji Demo - Nodes</name>
+
+    <parent>
+        <groupId>com.gluonhq.emoji</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
