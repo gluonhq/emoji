@@ -74,14 +74,18 @@ public class Main {
         }
         writer.close();
 
-        LOG.info("Copying files to emoji-core...");
-        Path resourcesPath = files.toAbsolutePath().getParent().getParent()
-                .resolve(Path.of("offline", "src", "main", "resources", "com", "gluonhq", "emoji"));
-        Files.copy(files.resolve("emoji.csv"), resourcesPath.resolve("emoji.csv"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(files.resolve("sheet_apple_20.png"), resourcesPath.resolve("util").resolve("sheet_apple_20.png"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(files.resolve("sheet_apple_32.png"), resourcesPath.resolve("util").resolve("sheet_apple_32.png"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(files.resolve("sheet_apple_64.png"), resourcesPath.resolve("util").resolve("sheet_apple_64.png"), StandardCopyOption.REPLACE_EXISTING);
+        LOG.info("Copying files to offline...");
+        Path offlinePath = files.toAbsolutePath().getParent()
+                .resolve(Path.of("offline", "src", "main", "resources", "com", "gluonhq", "emoji", "offline"));
+        Files.copy(files.resolve("emoji.csv"), offlinePath.resolve("emoji.csv"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(files.resolve("sheet_apple_20.png"), offlinePath.resolve("util").resolve("sheet_apple_20.png"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(files.resolve("sheet_apple_32.png"), offlinePath.resolve("util").resolve("sheet_apple_32.png"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(files.resolve("sheet_apple_64.png"), offlinePath.resolve("util").resolve("sheet_apple_64.png"), StandardCopyOption.REPLACE_EXISTING);
 
+        LOG.info("Copying files to emoji-core...");
+        Path resourcesPath = files.toAbsolutePath().getParent()
+                .resolve(Path.of("emoji", "src", "main", "resources", "com", "gluonhq", "emoji"));
+        Files.copy(files.resolve("emoji.csv"), resourcesPath.resolve("emoji.csv"), StandardCopyOption.REPLACE_EXISTING);
         LOG.info("Done!");
     }
 
