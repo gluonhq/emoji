@@ -12,7 +12,7 @@
     </parent>
 
     <properties>
-        <emoji.version>1.0.2-SNAPSHOT</emoji.version>
+        <emoji.version>${parent.version}</emoji.version>
     </properties>
 
     <dependencies>

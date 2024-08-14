@@ -1,5 +1,6 @@
-package com.gluonhq.emoji;
+package com.gluonhq.emoji.offline;
 
+import com.gluonhq.emoji.EmojiSpriteLoader;
 import javafx.scene.image.Image;
 
 import java.io.InputStream;
