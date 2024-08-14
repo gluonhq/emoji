@@ -15,6 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
         <javafx.version>20</javafx.version>
+        <emoji.version>1.0.2-SNAPSHOT</emoji.version>
         <javafx.plugin.version>0.0.8</javafx.plugin.version>
         <gluonfx.plugin.version>1.0.19</gluonfx.plugin.version>
         <main.class>com.gluonhq.sample.Main</main.class>
@@ -27,9 +28,9 @@
             <version>${javafx.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.gluonhq</groupId>
+            <groupId>com.gluonhq.emoji</groupId>
             <artifactId>emoji</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>${emoji.version}</version>
         </dependency>
     </dependencies>
 

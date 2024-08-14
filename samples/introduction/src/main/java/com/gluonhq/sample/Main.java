@@ -25,30 +25,29 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        VBox root = createRoot();
+        TextArea textArea = new TextArea();
+        textArea.setPrefHeight(150);
+        HBox hBox = new HBox();
+        VBox root = new VBox(20, textArea, hBox);
         root.setAlignment(Pos.TOP_CENTER);
+        root.setDisable(true);
+
+        textArea.textProperty().addListener((o, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                String unicodeText = createUnicodeText(newValue);
+                List<Node> nodes = TextUtils.convertToTextAndImageNodes(unicodeText);
+                hBox.getChildren().setAll(nodes);
+            }
+        });
+
+        EmojiLoaderFactory.getEmojiImageLoader().initialize().thenAccept(aBoolean -> {
+            root.setDisable(false);
+        });
 
         Scene scene = new Scene(root, 300, 200);
         scene.getStylesheets().add(Main.class.getResource("styles.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
-    }
-
-    private VBox createRoot() {
-        TextArea textArea = new TextArea();
-        textArea.setPrefHeight(150);
-        HBox hBox = new HBox();
-
-        textArea.textProperty().addListener((o, oldValue, newValue) -> {
-            if (newValue != null && !newValue.isEmpty()) {
-                EmojiLoaderFactory.getEmojiImageLoader().initialize().thenAccept(aBoolean -> {
-                    String unicodeText = createUnicodeText(newValue);
-                    List<Node> nodes = TextUtils.convertToTextAndImageNodes(unicodeText);
-                    Platform.runLater(() -> hBox.getChildren().setAll(nodes));
-                });
-            }
-        });
-        return new VBox(20, textArea, hBox);
     }
 
     private String createUnicodeText(String nv) {
