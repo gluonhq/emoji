@@ -76,7 +76,7 @@ public class Main {
 
         LOG.info("Copying files to emoji-core...");
         Path resourcesPath = files.toAbsolutePath().getParent().getParent()
-                .resolve(Path.of("emoji", "src", "main", "resources", "com", "gluonhq", "emoji"));
+                .resolve(Path.of("offline", "src", "main", "resources", "com", "gluonhq", "emoji"));
         Files.copy(files.resolve("emoji.csv"), resourcesPath.resolve("emoji.csv"), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(files.resolve("sheet_apple_20.png"), resourcesPath.resolve("util").resolve("sheet_apple_20.png"), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(files.resolve("sheet_apple_32.png"), resourcesPath.resolve("util").resolve("sheet_apple_32.png"), StandardCopyOption.REPLACE_EXISTING);
