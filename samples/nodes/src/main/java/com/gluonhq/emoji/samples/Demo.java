@@ -30,21 +30,21 @@ package com.gluonhq.emoji.samples;
 import com.gluonhq.emoji.Emoji;
 import com.gluonhq.emoji.EmojiData;
 import com.gluonhq.emoji.EmojiLoaderFactory;
-import com.gluonhq.emoji.EmojiSpriteLoader;
 import com.gluonhq.emoji.util.EmojiImageUtils;
 import com.gluonhq.emoji.util.TextUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Demo extends Application {
@@ -52,9 +52,9 @@ public class Demo extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        Scene scene = new Scene(new StackPane(progressIndicator), 1230, 800);
         TextFlow textFlow = new TextFlow();
-        ScrollPane pane = new ScrollPane(textFlow);
-        Scene scene = new Scene(pane, 1230, 800);
         textFlow.prefWidthProperty().bind(scene.widthProperty().subtract(30));
         primaryStage.setScene(scene);
         primaryStage.setTitle("Emoji nodes: " +
@@ -75,7 +75,10 @@ public class Demo extends Application {
                                     Tooltip.install(node, new Tooltip("Emoji: " + emoji.getName() + "\n" + unified)));
                         });
                 // Add nodes to textFlow
-                Platform.runLater(() -> textFlow.getChildren().addAll(emojiNodes));
+                Platform.runLater(() -> {
+                    textFlow.getChildren().addAll(emojiNodes);
+                    scene.setRoot(new ScrollPane(textFlow));
+                });
             }
         });
     }

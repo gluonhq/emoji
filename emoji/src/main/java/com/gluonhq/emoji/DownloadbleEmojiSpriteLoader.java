@@ -26,18 +26,27 @@ public class DownloadbleEmojiSpriteLoader implements EmojiSpriteLoader {
     private static final String EMOJI_PNG_URL = "https://github.com/iamcal/emoji-data/blob/" + COMMIT_NUMBER + "/sheets-clean/sheet_apple_%s_clean.png?raw=true";
 
     private static final String LOCAL_PATH = System.getProperty("user.home") + "/.gluon/emoji/" + COMMIT_NUMBER;
+    private static final int[] EMOJI_SIZES = new int[] { 20, 32, 64 };
     private boolean initialized;
 
     @Override
     public boolean isInitialized() {
-        return initialized;
+        if (!initialized) {
+            for (int size : EMOJI_SIZES) {
+                String fileName = "sheet_apple_" + size + ".png";
+                if (!Files.exists(Paths.get(LOCAL_PATH, fileName))) {
+                    return false;
+                }
+            }
+        }
+        return initialized = true;
     }
 
     @Override
     public CompletableFuture<Boolean> initialize() {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                downloadSprites(20, 32, 64);
+                downloadSprites(EMOJI_SIZES);
                 initialized = true;
                 return true;
             } catch (Exception e) {
@@ -56,6 +65,7 @@ public class DownloadbleEmojiSpriteLoader implements EmojiSpriteLoader {
                     downloadFile(new URI(String.format(EMOJI_PNG_URL, size)).toURL(), localPath);
                 }
             } catch (IOException | URISyntaxException e) {
+                LOG.severe("Download sprite failed: " + e);
                 throw new RuntimeException("Unable to load local image file", e);
             }
         }
@@ -70,6 +80,7 @@ public class DownloadbleEmojiSpriteLoader implements EmojiSpriteLoader {
         try {
             return new Image(new FileInputStream(localPath.toFile()));
         } catch (IOException e) {
+            LOG.severe("Loading of local image file failed: " + e);
             throw new RuntimeException("Unable to load local image file", e);
         }
     }
