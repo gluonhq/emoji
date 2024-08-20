@@ -18,9 +18,9 @@ import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
-public class DownloadbleEmojiSpriteLoader implements EmojiSpriteLoader {
+public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
 
-    private static final Logger LOG = Logger.getLogger(DownloadbleEmojiSpriteLoader.class.getName());
+    private static final Logger LOG = Logger.getLogger(DownloadableEmojiSpriteLoader.class.getName());
 
     private static final String COMMIT_NUMBER = "063f328d7951cb2e2a6678b06dcbdf8dd599fad7"; // tag 15.0.1
     private static final String EMOJI_PNG_URL = "https://github.com/iamcal/emoji-data/blob/" + COMMIT_NUMBER + "/sheets-clean/sheet_apple_%s_clean.png?raw=true";
@@ -87,7 +87,7 @@ public class DownloadbleEmojiSpriteLoader implements EmojiSpriteLoader {
 
     @Override
     public InputStream loadCSV() {
-        return DownloadbleEmojiSpriteLoader.class.getResourceAsStream("emoji.csv");
+        return DownloadableEmojiSpriteLoader.class.getResourceAsStream("emoji.csv");
     }
 
     private void downloadFile(URL url, Path filePath) throws IOException {
