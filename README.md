@@ -85,7 +85,7 @@ Use the emoji dependency in a Maven project:
 
 ```
 <dependency>
-    <groupId>com.gluonhq</groupId>
+    <groupId>com.gluonhq.emoji</groupId>
     <artifactId>emoji</artifactId>
     <version>${version}</version>
 </dependency>
@@ -97,7 +97,27 @@ Manually build the emoji artifact:
 mvn clean install -f emoji
 ```
 
-### samples
+### Offline
+Emojis are extracted from sprites which are downloaded and stored in local file system to reduce the size of the application.
+In cases where downloading of these sprites is not possible, the offline module can be added as a dependency.
+
+```
+<dependency>
+    <groupId>com.gluonhq.emoji</groupId>
+    <artifactId>offline</artifactId>
+    <version>${version}</version>
+</dependency>
+```
+
+Manually build the offline artifact:
+
+```
+mvn clean install -f offline
+```
+
+### Samples
+
+#### Nodes App
 Simple JavaFX application that displays all emojis.
 This application can be considered as a playground to test emoji and its APIs.
 
@@ -107,13 +127,13 @@ Each emoji is an ImageView and shows the description of the emoji on hover:
 
 ![emoji-sample-hover.png](.github/assets/emoji-sample-hover.png)
 
-Run the sample application:
+Run the sample nodes application:
 
 ```
-mvn javafx:run -f samples
+mvn javafx:run -f samples/nodes
 ```
 
-### emoji-updater
+### Updater
 Utility to manually update Emoji to the latest emoji data, whenever a new version is released.
 Normally, this will be used by the library developers, but in case we are falling behind, you can use it too ;)
 
@@ -121,7 +141,7 @@ To update the emoji list, set the [commit number](https://github.com/gluonhq/emo
 from [emoji-data](https://github.com/iamcal/emoji-data) and run:
 
 ```
-mvn javafx:run -f emoji-updater
+mvn javafx:run -f updater
 ```
 
 ## Contribution
