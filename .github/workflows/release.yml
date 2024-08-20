@@ -37,7 +37,7 @@ jobs:
       - name: Publish Release
         id: deploy
         run: |
-          mvn -B -ntp clean deploy -Prelease -pl '!updater'
+          mvn -B -ntp clean deploy -Prelease -pl 'emoji, offline'
           echo ::set-output name=exit_code::$?
         env:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
