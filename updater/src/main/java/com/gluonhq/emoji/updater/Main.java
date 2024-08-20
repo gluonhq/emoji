@@ -1,3 +1,30 @@
+/*
+ * Copyright (c) 2023, 2024, Gluon
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL GLUON BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package com.gluonhq.emoji.updater;
 
 import com.gluonhq.connect.converter.InputStreamIterableInputConverter;
@@ -21,6 +48,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 /**
@@ -75,17 +103,23 @@ public class Main {
         writer.close();
 
         LOG.info("Copying files to offline...");
-        Path offlinePath = files.toAbsolutePath().getParent()
+        Path offlinePath = files.toAbsolutePath().getParent().getParent()
                 .resolve(Path.of("offline", "src", "main", "resources", "com", "gluonhq", "emoji", "offline"));
         Files.copy(files.resolve("emoji.csv"), offlinePath.resolve("emoji.csv"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(files.resolve("sheet_apple_20.png"), offlinePath.resolve("util").resolve("sheet_apple_20.png"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(files.resolve("sheet_apple_32.png"), offlinePath.resolve("util").resolve("sheet_apple_32.png"), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(files.resolve("sheet_apple_64.png"), offlinePath.resolve("util").resolve("sheet_apple_64.png"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(files.resolve("sheet_apple_20.png"), offlinePath.resolve("sheet_apple_20.png"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(files.resolve("sheet_apple_32.png"), offlinePath.resolve("sheet_apple_32.png"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(files.resolve("sheet_apple_64.png"), offlinePath.resolve("sheet_apple_64.png"), StandardCopyOption.REPLACE_EXISTING);
 
         LOG.info("Copying files to emoji-core...");
-        Path resourcesPath = files.toAbsolutePath().getParent()
+        Path resourcesPath = files.toAbsolutePath().getParent().getParent()
                 .resolve(Path.of("emoji", "src", "main", "resources", "com", "gluonhq", "emoji"));
         Files.copy(files.resolve("emoji.csv"), resourcesPath.resolve("emoji.csv"), StandardCopyOption.REPLACE_EXISTING);
+        LOG.info("Updating emoji.properties...");
+        Path propertiesFilePath = resourcesPath.resolve("emoji.properties");
+        Properties properties = new Properties();
+        properties.load(Files.newInputStream(propertiesFilePath));
+        properties.setProperty("commit", COMMIT_NUMBER);
+        properties.store(Files.newOutputStream(propertiesFilePath), null);
         LOG.info("Done!");
     }
 

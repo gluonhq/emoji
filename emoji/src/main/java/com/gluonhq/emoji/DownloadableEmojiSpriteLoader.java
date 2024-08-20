@@ -1,3 +1,30 @@
+/*
+ * Copyright (c) 2024, Gluon
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL GLUON BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package com.gluonhq.emoji;
 
 import javafx.scene.image.Image;
@@ -15,6 +42,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -22,19 +50,28 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
 
     private static final Logger LOG = Logger.getLogger(DownloadableEmojiSpriteLoader.class.getName());
 
-    private static final String COMMIT_NUMBER = "063f328d7951cb2e2a6678b06dcbdf8dd599fad7"; // tag 15.0.1
-    private static final String EMOJI_PNG_URL = "https://github.com/iamcal/emoji-data/blob/" + COMMIT_NUMBER + "/sheets-clean/sheet_apple_%s_clean.png?raw=true";
-
-    private static final String LOCAL_PATH = System.getProperty("user.home") + "/.gluon/emoji/" + COMMIT_NUMBER;
+    private static final String EMOJI_PNG_URL = "https://github.com/iamcal/emoji-data/blob/%s/sheets-clean/sheet_apple_%s_clean.png?raw=true";
+    private static final String LOCAL_PATH = System.getProperty("user.home") + "/.gluon/emoji/%s";
     private static final int[] EMOJI_SIZES = new int[] { 20, 32, 64 };
     private boolean initialized;
+    private final String commit;
+
+    public DownloadableEmojiSpriteLoader() {
+        Properties properties = new Properties();
+        try (InputStream input = DownloadableEmojiSpriteLoader.class.getResourceAsStream("emoji.properties")) {
+            properties.load(input);
+            commit = properties.getProperty("commit");
+        } catch (Exception ex) {
+            LOG.severe("Unable to find emoji.properties");
+            throw new RuntimeException("emoji.properties not available", ex);
+        }
+    }
 
     @Override
     public boolean isInitialized() {
         if (!initialized) {
             for (int size : EMOJI_SIZES) {
-                String fileName = "sheet_apple_" + size + ".png";
-                if (!Files.exists(Paths.get(LOCAL_PATH, fileName))) {
+                if (!localFileExists(size)) {
                     return false;
                 }
             }
@@ -57,16 +94,15 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
 
     private void downloadSprites(int... sizes) {
         for (int size : sizes) {
-            String fileName = "sheet_apple_" + size + ".png";
-            Path localPath = Paths.get(LOCAL_PATH, fileName);
-            try {
-                if (!Files.exists(localPath)) {
+            if (!localFileExists(size)) {
+                try {
                     LOG.fine("Download sprite file for size: " + size);
-                    downloadFile(new URI(String.format(EMOJI_PNG_URL, size)).toURL(), localPath);
+                    String url = String.format(EMOJI_PNG_URL, commit, size);
+                    downloadFile(new URI(url).toURL(), getLocalFilePath(size));
+                } catch (IOException | URISyntaxException e) {
+                    LOG.severe("Download sprite failed: " + e);
+                    throw new RuntimeException("Unable to load local image file", e);
                 }
-            } catch (IOException | URISyntaxException e) {
-                LOG.severe("Download sprite failed: " + e);
-                throw new RuntimeException("Unable to load local image file", e);
             }
         }
     }
@@ -75,10 +111,8 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
         if (!initialized) {
             throw new RuntimeException("Sprite Loader hasn't been initialized or completed initialization");
         }
-        String fileName = "sheet_apple_" + size + ".png";
-        Path localPath = Paths.get(LOCAL_PATH, fileName);
         try {
-            return new Image(new FileInputStream(localPath.toFile()));
+            return new Image(new FileInputStream(getLocalFilePath(size).toFile()));
         } catch (IOException e) {
             LOG.severe("Loading of local image file failed: " + e);
             throw new RuntimeException("Unable to load local image file", e);
@@ -100,5 +134,15 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
              FileChannel fileChannel = fileOutputStream.getChannel()) {
             fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         }
+    }
+
+    private boolean localFileExists(int size) {
+        Path localFilePath = getLocalFilePath(size);
+        return Files.exists(localFilePath);
+    }
+
+    private Path getLocalFilePath(int size) {
+        String fileName = "sheet_apple_" + size + ".png";
+        return Paths.get(String.format(LOCAL_PATH, commit), fileName);
     }
 }
