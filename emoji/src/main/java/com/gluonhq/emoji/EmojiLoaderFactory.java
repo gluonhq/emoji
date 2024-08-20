@@ -7,7 +7,7 @@ public class EmojiLoaderFactory {
     private static final Logger LOG = Logger.getLogger(EmojiLoaderFactory.class.getName());
 
     private static final String OFFLINE_LOADER_CLASS = "com.gluonhq.emoji.LocalEmojiSpriteLoader";
-    private static final String ONLINE_LOADER_CLASS = "com.gluonhq.emoji.DownloadbleEmojiSpriteLoader";
+    private static final String ONLINE_LOADER_CLASS = "com.gluonhq.emoji.DownloadableEmojiSpriteLoader";
 
     private static EmojiSpriteLoader emojiSpriteLoader;
     public static EmojiSpriteLoader getEmojiImageLoader() {
