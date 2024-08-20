@@ -42,8 +42,10 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
@@ -87,6 +89,7 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
                 initialized = true;
                 return true;
             } catch (Exception e) {
+                LOG.log(Level.SEVERE, "Downloading of sprites failed", e);
                 return false;
             }
         });
@@ -100,7 +103,7 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
                     String url = String.format(EMOJI_PNG_URL, commit, size);
                     downloadFile(new URI(url).toURL(), getLocalFilePath(size));
                 } catch (IOException | URISyntaxException e) {
-                    LOG.severe("Download sprite failed: " + e);
+                    LOG.severe("Download sprite failed: " + e.getMessage());
                     throw new RuntimeException("Unable to load local image file", e);
                 }
             }
@@ -114,7 +117,7 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
         try {
             return new Image(new FileInputStream(getLocalFilePath(size).toFile()));
         } catch (IOException e) {
-            LOG.severe("Loading of local image file failed: " + e);
+            LOG.severe("Loading of local image file failed: " + e.getMessage());
             throw new RuntimeException("Unable to load local image file", e);
         }
     }
@@ -129,10 +132,10 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
         if (parentDir != null && !Files.exists(parentDir)) {
             Files.createDirectories(parentDir);
         }
-        ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath.toFile());
-             FileChannel fileChannel = fileOutputStream.getChannel()) {
-            fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        try (InputStream inputStream = url.openStream()) {
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Downloading file failed", e);
         }
     }
 
