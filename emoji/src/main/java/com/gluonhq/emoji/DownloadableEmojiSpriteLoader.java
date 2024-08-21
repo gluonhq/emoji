@@ -45,6 +45,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,7 +93,7 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
                 LOG.log(Level.SEVERE, "Downloading of sprites failed", e);
                 return false;
             }
-        });
+        }, Executors.newSingleThreadExecutor());
     }
 
     private void downloadSprites(int... sizes) {
