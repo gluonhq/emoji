@@ -75,6 +75,7 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
         if (!initialized) {
             for (int size : EMOJI_SIZES) {
                 if (!localFileExists(size)) {
+                    LOG.info("Sprite file not found for size: " + size);
                     return false;
                 }
             }
