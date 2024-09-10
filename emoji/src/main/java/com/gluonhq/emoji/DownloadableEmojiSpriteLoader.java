@@ -90,7 +90,11 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
                 LOG.log(Level.SEVERE, "Downloading of sprites failed", e);
                 return false;
             }
-        }, Executors.newSingleThreadExecutor());
+        }, Executors.newSingleThreadExecutor(r -> {
+            Thread t = Executors.defaultThreadFactory().newThread(r);
+            t.setDaemon(true);
+            return t;
+        }));
     }
 
     private void downloadSprites(int... sizes) {
