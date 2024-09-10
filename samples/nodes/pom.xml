@@ -12,11 +12,7 @@
     </parent>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>11</maven.compiler.release>
-        <javafx.version>20</javafx.version>
-        <emoji.version>1.0.2-SNAPSHOT</emoji.version>
-        <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+        <emoji.version>${project.parent.version}</emoji.version>
         <main.class>com.gluonhq.emoji.samples.Demo</main.class>
     </properties>
 
@@ -43,7 +39,7 @@
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>${javafx.maven.plugin.version}</version>
+                <version>${javafx.plugin.version}</version>
                 <configuration>
                     <mainClass>${main.class}</mainClass>
                 </configuration>

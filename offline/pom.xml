@@ -12,7 +12,7 @@
     </parent>
 
     <properties>
-        <emoji.version>${parent.version}</emoji.version>
+        <emoji.version>${project.parent.version}</emoji.version>
     </properties>
 
     <dependencies>

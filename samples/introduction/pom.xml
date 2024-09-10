@@ -13,11 +13,7 @@
     </parent>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>11</maven.compiler.release>
-        <javafx.version>20</javafx.version>
-        <emoji.version>1.0.2-SNAPSHOT</emoji.version>
-        <javafx.plugin.version>0.0.8</javafx.plugin.version>
+        <emoji.version>${project.parent.version}</emoji.version>
         <gluonfx.plugin.version>1.0.19</gluonfx.plugin.version>
         <main.class>com.gluonhq.sample.Main</main.class>
     </properties>
