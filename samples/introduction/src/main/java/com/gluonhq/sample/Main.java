@@ -62,9 +62,13 @@ public class Main extends Application {
             }
         });
 
-        EmojiLoaderFactory.getEmojiImageLoader().initialize().thenAccept(aBoolean -> {
+        if (!EmojiLoaderFactory.getEmojiImageLoader().isInitialized()) {
+            EmojiLoaderFactory.getEmojiImageLoader().initialize().thenAccept(aBoolean -> {
+                root.setDisable(false);
+            });
+        } else {
             root.setDisable(false);
-        });
+        }
 
         Scene scene = new Scene(root, 300, 200);
         scene.getStylesheets().add(Main.class.getResource("styles.css").toExternalForm());

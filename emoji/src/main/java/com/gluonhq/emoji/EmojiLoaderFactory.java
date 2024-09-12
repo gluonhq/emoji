@@ -40,10 +40,10 @@ public class EmojiLoaderFactory {
     public static EmojiSpriteLoader getEmojiImageLoader() {
         if (emojiSpriteLoader == null) {
             if (isClassAvailable(OFFLINE_LOADER_CLASS)) {
-                LOG.info("Loading " + OFFLINE_LOADER_CLASS);
+                LOG.fine("Loading " + OFFLINE_LOADER_CLASS);
                 emojiSpriteLoader = createInstance(OFFLINE_LOADER_CLASS);
             } else {
-                LOG.info("Loading " + ONLINE_LOADER_CLASS);
+                LOG.fine("Loading " + ONLINE_LOADER_CLASS);
                 emojiSpriteLoader = createInstance(ONLINE_LOADER_CLASS);
             }
         }

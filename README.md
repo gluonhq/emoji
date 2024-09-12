@@ -133,6 +133,12 @@ Run the sample nodes application:
 mvn javafx:run -f samples/nodes
 ```
 
+Run the sample introduction application:
+
+```
+mvn javafx:run -f samples/introduction
+```
+
 ### Updater
 Utility to manually update Emoji to the latest emoji data, whenever a new version is released.
 Normally, this will be used by the library developers, but in case we are falling behind, you can use it too ;)
