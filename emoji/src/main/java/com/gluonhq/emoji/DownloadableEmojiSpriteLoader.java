@@ -101,9 +101,17 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
         for (int size : sizes) {
             if (!localFileExists(size)) {
                 try {
+                    Path localFilePath = getLocalFilePath(size);
+                    Path parentDir = localFilePath.getParent();
+                    if (parentDir != null && !Files.exists(parentDir)) {
+                        Files.createDirectories(parentDir);
+                    }
+                    Path tmpFilePath = getTmpFilePath(size);
+                    LOG.fine("Creating tmp file: " + tmpFilePath);
+                    Files.createFile(tmpFilePath);
                     LOG.fine("Download sprite file for size: " + size);
                     String url = String.format(EMOJI_PNG_URL, commit, size);
-                    downloadFile(new URI(url).toURL(), getLocalFilePath(size));
+                    downloadFile(new URI(url).toURL(), localFilePath, tmpFilePath);
                 } catch (IOException | URISyntaxException e) {
                     LOG.severe("Download sprite failed: " + e.getMessage());
                     throw new RuntimeException("Unable to load local image file", e);
@@ -129,13 +137,12 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
         return DownloadableEmojiSpriteLoader.class.getResourceAsStream("emoji.csv");
     }
 
-    private void downloadFile(URL url, Path filePath) throws IOException {
-        Path parentDir = filePath.getParent();
-        if (parentDir != null && !Files.exists(parentDir)) {
-            Files.createDirectories(parentDir);
-        }
+    private void downloadFile(URL url, Path filePath, Path tmpFile) throws IOException {
         try (InputStream inputStream = url.openStream()) {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            LOG.fine("Sprite downloaded successfully as: " + filePath);
+            LOG.fine("Removing tmp file: " + tmpFile);
+            Files.delete(tmpFile);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Downloading file failed", e);
         }
@@ -143,11 +150,27 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
 
     private boolean localFileExists(int size) {
         Path localFilePath = getLocalFilePath(size);
+        Path tmpFilePath = getTmpFilePath(size);
+        if (Files.exists(tmpFilePath)) {
+            LOG.fine("Temporary download file found");
+            LOG.fine("Delete file and re-try downloading");
+            try {
+                Files.deleteIfExists(localFilePath);
+                Files.delete(tmpFilePath);
+                return false;
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to delete file: " + localFilePath);
+            }
+        }
         return Files.exists(localFilePath);
     }
 
     private Path getLocalFilePath(int size) {
         String fileName = "sheet_apple_" + size + ".png";
         return Paths.get(String.format(LOCAL_PATH, commit), fileName);
+    }
+
+    private Path getTmpFilePath(int size) {
+        return Paths.get(String.format(LOCAL_PATH, commit)).resolve(size + ".downloading");
     }
 }
