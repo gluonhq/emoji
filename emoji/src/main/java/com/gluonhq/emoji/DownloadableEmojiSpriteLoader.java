@@ -171,6 +171,6 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
     }
 
     private Path getLockFilePath(int size) {
-        return Paths.get(String.format(LOCAL_PATH, commit)).resolve(size + ".downloading");
+        return Paths.get(String.format(LOCAL_PATH, commit)).resolve(size + ".lck");
     }
 }
