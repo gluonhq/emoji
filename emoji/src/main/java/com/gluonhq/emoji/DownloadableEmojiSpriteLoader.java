@@ -106,12 +106,12 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
                     if (parentDir != null && !Files.exists(parentDir)) {
                         Files.createDirectories(parentDir);
                     }
-                    Path tmpFilePath = getTmpFilePath(size);
-                    LOG.fine("Creating tmp file: " + tmpFilePath);
-                    Files.createFile(tmpFilePath);
+                    Path lockFilePath = getLockFilePath(size);
+                    LOG.fine(String.format("Creating lock file for size %s at %s", size, lockFilePath));
+                    Files.createFile(lockFilePath);
                     LOG.fine("Download sprite file for size: " + size);
                     String url = String.format(EMOJI_PNG_URL, commit, size);
-                    downloadFile(new URI(url).toURL(), localFilePath, tmpFilePath);
+                    downloadFile(new URI(url).toURL(), localFilePath, lockFilePath);
                 } catch (IOException | URISyntaxException e) {
                     LOG.severe("Download sprite failed: " + e.getMessage());
                     throw new RuntimeException("Unable to load local image file", e);
@@ -137,12 +137,12 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
         return DownloadableEmojiSpriteLoader.class.getResourceAsStream("emoji.csv");
     }
 
-    private void downloadFile(URL url, Path filePath, Path tmpFile) throws IOException {
+    private void downloadFile(URL url, Path filePath, Path lockFile) throws IOException {
         try (InputStream inputStream = url.openStream()) {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             LOG.fine("Sprite downloaded successfully as: " + filePath);
-            LOG.fine("Removing tmp file: " + tmpFile);
-            Files.delete(tmpFile);
+            LOG.fine("Removing tmp file: " + lockFile);
+            Files.delete(lockFile);
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Downloading file failed", e);
         }
@@ -150,13 +150,13 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
 
     private boolean localFileExists(int size) {
         Path localFilePath = getLocalFilePath(size);
-        Path tmpFilePath = getTmpFilePath(size);
-        if (Files.exists(tmpFilePath)) {
-            LOG.fine("Temporary download file found");
-            LOG.fine("Delete file and re-try downloading");
+        Path lockFilePath = getLockFilePath(size);
+        if (Files.exists(lockFilePath)) {
+            LOG.info("Lock file found for size: " + size);
+            LOG.info("Delete file and re-try downloading");
             try {
                 Files.deleteIfExists(localFilePath);
-                Files.delete(tmpFilePath);
+                Files.delete(lockFilePath);
                 return false;
             } catch (IOException e) {
                 throw new RuntimeException("Unable to delete file: " + localFilePath);
@@ -170,7 +170,7 @@ public class DownloadableEmojiSpriteLoader implements EmojiSpriteLoader {
         return Paths.get(String.format(LOCAL_PATH, commit), fileName);
     }
 
-    private Path getTmpFilePath(int size) {
+    private Path getLockFilePath(int size) {
         return Paths.get(String.format(LOCAL_PATH, commit)).resolve(size + ".downloading");
     }
 }
