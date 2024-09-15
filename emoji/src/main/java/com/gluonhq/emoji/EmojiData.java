@@ -67,7 +67,7 @@ public class EmojiData {
 
     static {
         // See emoji-updater module on how to get and update this csv file
-        try (final InputStream emojiStream = EmojiData.class.getResourceAsStream("emoji.csv");
+        try (final InputStream emojiStream = EmojiLoaderFactory.getEmojiImageLoader().loadCSV();
              Scanner scanner = new Scanner(Objects.requireNonNull(emojiStream))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();

@@ -34,6 +34,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.gluonhq.emoji.EmojiLoaderFactory;
+import com.gluonhq.emoji.EmojiSpriteLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -52,25 +55,26 @@ public class EmojiImageUtils {
 
     public static final String IMAGE_VIEW_EMOJI_PROPERTY = "emoji_unified";
 
-    // private static final Map<String, Image> emojiMap20;
-    // private static final Map<String, Image> emojiMap32;
-    /*static {
-        emojiSprite20 = new Image(EmojiImageUtils.class.getResourceAsStream("/org/signal/sheet_apple_20.png"));
-        emojiSprite32 = new Image(EmojiImageUtils.class.getResourceAsStream("/org/signal/sheet_apple_32.png"));
-        emojiMap20 = new HashMap<>();
-        emojiMap32 = new HashMap<>();
-    }*/
-
     public static Image getImage20() {
         if (emojiSprite20 == null) {
-            emojiSprite20 = new Image(EmojiImageUtils.class.getResourceAsStream("sheet_apple_20.png"));
+            EmojiSpriteLoader emojiImageLoader = EmojiLoaderFactory.getEmojiImageLoader();
+            if (emojiImageLoader.isInitialized()) {
+                emojiSprite20 = emojiImageLoader.loadEmojiSprite(20);
+            } else {
+                throw new RuntimeException("EmojiSpriteLoader not initialized");
+            }
         }
         return emojiSprite20;
     }
 
     public static Image getImage32() {
         if (emojiSprite32 == null) {
-            emojiSprite32 = new Image(EmojiImageUtils.class.getResourceAsStream("sheet_apple_32.png"));
+            EmojiSpriteLoader emojiImageLoader = EmojiLoaderFactory.getEmojiImageLoader();
+            if (emojiImageLoader.isInitialized()) {
+                emojiSprite32 = emojiImageLoader.loadEmojiSprite(32);
+            } else {
+                throw new RuntimeException("EmojiSpriteLoader not initialized");
+            }
         }
         return emojiSprite32;
     }
@@ -78,7 +82,12 @@ public class EmojiImageUtils {
     public static Image getImage64() {
         Image image64 = emojiSprite64 == null ? null : emojiSprite64.get();
         if (image64 == null) {
-            image64 = new Image(EmojiImageUtils.class.getResourceAsStream("sheet_apple_64.png"));
+            EmojiSpriteLoader emojiImageLoader = EmojiLoaderFactory.getEmojiImageLoader();
+            if (emojiImageLoader.isInitialized()) {
+                image64 = emojiImageLoader.loadEmojiSprite(64);
+            } else {
+                throw new RuntimeException("EmojiSpriteLoader not initialized");
+            }
             emojiSprite64 = new SoftReference<>(image64);
         }
         return image64;
@@ -203,24 +212,4 @@ public class EmojiImageUtils {
         emojiView.setFitHeight(size);
         return emojiView;
     }
-
-    /*public static Image getImage20(Emoji emoji) {
-        return emojiMap20.computeIfAbsent(emoji.getShort_name().orElse(""), s -> {
-            final PixelReader pixelReader = emojiSprite20.getPixelReader();
-            // each image has a padding of 1px
-            final int x = emoji.getSheet_x() * 22;
-            final int y = emoji.getSheet_y() * 22;
-            return new WritableImage(pixelReader, x, y, 20, 20);
-        });
-    }
-    
-    public static Image getImage32(Emoji emoji) {
-        return emojiMap32.computeIfAbsent(emoji.getShort_name().orElse(""), s -> {
-            final PixelReader pixelReader = emojiSprite32.getPixelReader();
-            // each image has a padding of 1px
-            final int x = emoji.getSheet_x() * 34;
-            final int y = emoji.getSheet_y() * 34;
-            return new WritableImage(pixelReader, x, y, 32, 32);
-        });
-    }*/
 }

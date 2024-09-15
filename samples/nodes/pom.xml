@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.gluonhq</groupId>
-    <artifactId>samples</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>nodes</artifactId>
+    <name>Emoji Demo - Nodes</name>
 
-    <name>samples</name>
+    <parent>
+        <groupId>com.gluonhq.emoji</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>11</maven.compiler.release>
-        <javafx.version>20</javafx.version>
-        <emoji.version>1.0.2-SNAPSHOT</emoji.version>
-        <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+        <emoji.version>${project.parent.version}</emoji.version>
         <main.class>com.gluonhq.emoji.samples.Demo</main.class>
     </properties>
 
@@ -23,7 +23,7 @@
             <version>${javafx.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.gluonhq</groupId>
+            <groupId>com.gluonhq.emoji</groupId>
             <artifactId>emoji</artifactId>
             <version>${emoji.version}</version>
         </dependency>
@@ -39,7 +39,7 @@
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>${javafx.maven.plugin.version}</version>
+                <version>${javafx.plugin.version}</version>
                 <configuration>
                     <mainClass>${main.class}</mainClass>
                 </configuration>
@@ -55,6 +55,9 @@
                         <!-- Configuration for debugging -->
                         <id>debug</id>
                         <configuration>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:8000</option>
+                            </options>
                             <mainClass>${main.class}</mainClass>
                         </configuration>
                     </execution>
