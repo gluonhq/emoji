@@ -4,7 +4,7 @@
     <groupId>com.gluonhq.emoji</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>Emoji</name>
     <description>Emoji support for JavaFX</description>
     <inceptionYear>2019</inceptionYear>
