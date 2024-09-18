@@ -33,7 +33,7 @@ jobs:
           ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           if [[ $ver == *"SNAPSHOT"* ]]
           then
-              mvn -B -ntp clean deploy -pl 'emoji, offline'
+              mvn -B -ntp clean deploy -pl 'emoji, offline' -am
           fi
         shell: bash
         env:
