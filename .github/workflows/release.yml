@@ -10,10 +10,6 @@ on:
 jobs:
   pre-release:
     uses: gluonhq/actions/.github/workflows/maven-pre-release.yml@v1
-    with:
-      buildDir: emoji
-      depProperty: emoji.version
-      depDirectory: samples
 
   release:
     needs: pre-release
@@ -37,6 +33,8 @@ jobs:
       - name: Publish Release
         id: deploy
         run: |
+          pwd
+          ls
           mvn -B -ntp clean deploy -Prelease -pl 'emoji, offline' -am
           echo ::set-output name=exit_code::$?
         env:
@@ -50,6 +48,3 @@ jobs:
     with:
       tag: ${{ needs.pre-release.outputs.tag }}
       nextVersion: ${{ github.event.inputs.nextVersion }}
-      buildDir: emoji
-      depProperty: emoji.version
-      depDirectory: samples
