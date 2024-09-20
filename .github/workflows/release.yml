@@ -9,7 +9,7 @@ on:
 
 jobs:
   pre-release:
-    uses: gluonhq/actions/.github/workflows/maven-pre-release.yml@v1
+    uses: gluonhq/actions/.github/workflows/maven-pre-release.yml@modules
 
   release:
     needs: pre-release
