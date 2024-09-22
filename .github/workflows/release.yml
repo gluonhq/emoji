@@ -9,11 +9,7 @@ on:
 
 jobs:
   pre-release:
-    uses: gluonhq/actions/.github/workflows/maven-pre-release.yml@v1
-    with:
-      buildDir: emoji
-      depProperty: emoji.version
-      depDirectory: samples
+    uses: gluonhq/actions/.github/workflows/maven-pre-release.yml@modules
 
   release:
     needs: pre-release
@@ -46,10 +42,7 @@ jobs:
 
   post-release:
     needs: [ pre-release, release ]
-    uses: gluonhq/actions/.github/workflows/maven-post-release.yml@v1
+    uses: gluonhq/actions/.github/workflows/maven-post-release.yml@modules
     with:
       tag: ${{ needs.pre-release.outputs.tag }}
       nextVersion: ${{ github.event.inputs.nextVersion }}
-      buildDir: emoji
-      depProperty: emoji.version
-      depDirectory: samples
