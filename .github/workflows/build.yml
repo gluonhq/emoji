@@ -19,7 +19,7 @@ jobs:
         with:
           distribution: 'oracle'
           java-version: '17'
-          server-id: ossrh
+          server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_CENTRAL_TOKEN
 
